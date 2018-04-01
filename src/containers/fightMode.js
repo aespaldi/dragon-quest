@@ -53,23 +53,17 @@ class Fight extends Component {
     let damageToDragon = humanStrength - dragonDefense;
 
     const battleTurn = (hp, damage, type) => {
-      console.log('type of player in battle', type);
       // if the damage being dealt is greater than 0:
       if (damage > 0) {
         // let the actual damage done to the opponent equal their hp minus the damage score.
         let turnDamageToFoe = hp - damage;
-        console.log('turn damage', turnDamageToFoe)
-        console.log('hp', hp);
-        console.log('damage', damage);
         // modify the hp to equal their current hp minus the turn damage they received.
         hp = hp - turnDamageToFoe;
-        console.log('human hp after damage', hp);
         // if the type of the player turn is 'dragon', set the state of the human hp to be the new hp above.
         if (type === 'dragon') {
           this.setState({
             humanHP: hp,
           })
-          console.log('humanHP in state after changing state', humanHP);
           // otherwise, if the turn is 'human', set the state of the dragon hp to be the new hp above.
         } else {
           this.setState({
@@ -79,7 +73,6 @@ class Fight extends Component {
       }
       // if the hp of the current foe is greater than 0, we want to change turns.
       if (hp > 0) {
-        console.log('condition - hp greater than 0', hp);
         // if the current turn is the human's, change to the dragon's turn after 2 seconds by calling battleTurn with type dragon. otherwise, call the human's turn.
         setTimeout(() => {
           if (type === 'human') {
@@ -90,7 +83,6 @@ class Fight extends Component {
         }, 2000);
         // however, if the current foe's hp is lower than 0, a win condition has occured.
       } else {
-        console.log('condition - hp is less than 0', hp)
         if (type === 'dragon') {
           this.setState({
             winner: 'Dragons Wins!',
@@ -110,67 +102,6 @@ class Fight extends Component {
     };
     battleTurn(humanHP, damageToHuman, 'dragon');
   };
-
-
-  //   const humanTurn = (hp, damage) => {
-  //     this.changeActiveCardBorder();
-  //     if (damage > 0) {
-  //       let turnDamage = dragonHP - damageToDragon;
-  //       dragonHP = dragonHP - turnDamage;
-  //       this.setState({
-  //         dragonHP: dragonHP,
-  //       })
-  //     }
-  //
-  //     if (dragonHP > 0) {
-  //       setTimeout(() => {
-  //         dragonTurn()
-  //         this.changeActiveCardBorder();
-  //       }, 2000);
-  //     } else {
-  //       const leveledUpHuman = this.levelUpHuman(this.props.human)
-  //       this.props.saveHuman(leveledUpHuman);
-  //       this.setState({
-  //         winner: 'Human wins!'
-  //       })
-  //       setTimeout(() => {
-  //         const leveledUpHuman = this.levelUpHuman(this.props.human)
-  //         this.props.saveHuman(leveledUpHuman);
-  //         this.props.toggleFightMode();
-  //       }, 3000);
-  //     }
-  //   }
-  //
-  //   // give the dragon a turn.
-  //   const dragonTurn = () => {
-  //     this.changeActiveCardBorder();
-  //     // the damage is the current hp of the human minus the calculated damaged.
-  //     if (damageToHuman > 0) {
-  //       humanHP = humanHP - damageToHuman;
-  //       this.setState({
-  //         humanHP: humanHP,
-  //       })
-  //     }
-  //     // if the human hp minus the turn damage is greater than 0, call humanTurn.
-  //     if (humanHP > 0) {
-  //       setTimeout(() => {
-  //         humanTurn();
-  //         this.changeActiveCardBorder();
-  //       }, 2000)
-  //
-  //     } else {
-  //       this.setState({
-  //         winner: 'Dragon wins!'
-  //       })
-  //       setTimeout(() => {
-  //         const leveledUpHuman = this.levelUpHuman(this.props.human)
-  //         this.props.saveHuman(leveledUpHuman);
-  //         this.props.toggleFightMode();
-  //       }, 3000);
-  //     }
-  //   }
-  //   humanTurn();
-  // }
 
   changeActiveCardBorder() {
     if (this.state.class === 'black') {
