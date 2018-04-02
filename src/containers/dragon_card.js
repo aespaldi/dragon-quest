@@ -6,8 +6,6 @@ class DragonCard extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
-
     this.createFightMode = this.createFightMode.bind(this);
   }
 

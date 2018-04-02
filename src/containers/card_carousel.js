@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Carousel from 'react-bootstrap/lib/Carousel';
-import DragonCard from '../controllers/dragon_card.js';
+import DragonCard from '../containers/dragon_card.js';
 import { addToUserDragons } from '../actions/index';
 import './card_carousel.css';
 

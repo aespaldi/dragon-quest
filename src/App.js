@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
-import CardCarousel from './controllers/card_carousel';
-import GetRandomDragon from './controllers/get_random_dragon';
-import Fight from './controllers/fightMode';
+import CardCarousel from './containers/card_carousel';
+import GetRandomDragon from './containers/get_random_dragon';
+import Fight from './containers/fightMode';
 
 class App extends Component {
   constructor(props) {
@@ -35,9 +35,11 @@ class App extends Component {
 
   toggleFightMode() {
     if (this.state.fightMode) {
-      this.setState({
-        fightMode: false,
-      })
+      setTimeout(() => {
+        this.setState({
+          fightMode: false,
+        })
+      }, 3000)
     } else {
       this.setState({
         fightMode: true,

@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import DragonCard from '../controllers/dragon_card.js';
+import DragonCard from '../containers/dragon_card.js';
 import { getRandomDragon } from '../actions';
 import { addToUserDragons } from '../actions';
 import './get_random_dragon.css';

@@ -6,6 +6,8 @@ export const ENTER_FIGHT = 'ENTER_FIGHT';
 export const FIGHTING_DRAGON = 'FIGHTING_DRAGON';
 export const SPAWN_HUMAN = 'SPAWN_HUMAN';
 export const SAVE_NEW_HUMAN = 'SAVE_NEW_HUMAN';
+export const UPDATE_HUMAN_HP = 'UPDATE_HUMAN_HP';
+export const UPDATE_DRAGON_HP = 'UPDATE_DRAGON_HP';
 
 // const ROOT_URL = `https://dragon-game-api.herokuapp.com`;
 const ROOT_URL = 'http://localhost:3001';
@@ -47,5 +49,19 @@ export function saveHuman(human) {
   return {
     type: SAVE_NEW_HUMAN,
     payload: human,
+  }
+}
+
+export function updateHumanHP(human) {
+  return {
+    type: UPDATE_HUMAN_HP,
+    payload: human,
+  }
+}
+
+export function updateDragonHP(dragon) {
+  return {
+    type: UPDATE_DRAGON_HP,
+    payload: dragon,
   }
 }
