@@ -35,11 +35,9 @@ class App extends Component {
 
   toggleFightMode() {
     if (this.state.fightMode) {
-      setTimeout(() => {
-        this.setState({
-          fightMode: false,
-        })
-      }, 3000)
+      this.setState({
+        fightMode: false,
+      })
     } else {
       this.setState({
         fightMode: true,
