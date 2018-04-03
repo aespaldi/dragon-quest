@@ -9,5 +9,7 @@
 }
 
 .fight-card {
+  animation-duration: 2s;
+  background-color: black;
   margin: 10px;
 }
