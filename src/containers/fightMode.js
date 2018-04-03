@@ -14,6 +14,7 @@ class Fight extends Component {
       dragonCardBackGround: 'black',
       humanCardBackGround: 'black',
       battleEntered: false,
+      battleMode: true,
     }
 
     this.updateHumanStats = this.updateHumanStats.bind(this);
@@ -22,6 +23,7 @@ class Fight extends Component {
     this.changeActiveCard = this.changeActiveCard.bind(this);
     this.levelUpHuman = this.levelUpHuman.bind(this);
     this.displayWinnerMessage = this.displayWinnerMessage.bind(this);
+    this.levelUpDragon = this.levelUpDragon.bind(this);
   }
 
   componentDidMount() {
@@ -101,17 +103,28 @@ class Fight extends Component {
 
   // levels up the human character, regardless of battle outcome.
   levelUpHuman() {
-    const newHuman = {
-      type: this.props.human.type,
+    console.log('the levelUpHuman function is being called');
+    const newHuman = Object.assign(this.props.human, {
       level: this.props.human.level + 1,
       currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       maxhp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       strength: Math.round(this.props.human.strength + (this.props.human.strength * .15)),
       defense: Math.round(this.props.human.defense + (this.props.human.strength * .15)),
-      imageurl: this.props.human.imageurl,
-    }
+    })
     return newHuman;
   };
+
+  levelUpDragon(dragon) {
+    console.log('the levelUpDragon function is being called');
+    const newDragon = Object.assign(this.props.fightingDragon, {
+      level: this.props.fightingDragon.level + 1,
+      currenthp: Math.round(this.props.fightingDragon.maxhp + (this.props.fightingDragon.maxhp * .10)),
+      maxhp: Math.round(this.props.fightingDragon.maxhp + (this.props.fightingDragon.maxhp * .10)),
+      strength: Math.round(this.props.fightingDragon.strength + (this.props.fightingDragon.strength * .15)),
+      defense: Math.round(this.props.fightingDragon.defense + (this.props.fightingDragon.defense * .15)),
+    })
+    return newDragon;
+  }
 
   // View functions:
 
@@ -141,8 +154,6 @@ class Fight extends Component {
       })
     }
   };
-
-  //
 
   render() {
 
@@ -211,4 +222,4 @@ function mapStateToProps({ fightingDragon, human}) {
   return { fightingDragon, human };
 };
 
-export default connect(mapStateToProps, { callHuman, saveHuman, updateDragonHP, updateHumanHP })(Fight);
+export default connect(mapStateToProps, { callHuman, saveHuman, updateDragonHP, updateHumanHP})(Fight);

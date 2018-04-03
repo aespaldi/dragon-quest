@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import DragonsReducer from './reducer_dragons';
 import RandomDragonReducer from './reducer_random_dragon';
-import EnterFightModeReducer from './enter_fight_reducer';
-import FightingDragonReducer from './fighting_dragon_reducer';
-import HumanReducer from './human_reducer';
+import EnterFightModeReducer from './reducer_enter_fight';
+import FightingDragonReducer from './reducer_fighting_dragon';
+import HumanReducer from './reducer_human';
 
 const rootReducer = combineReducers({
   dragons: DragonsReducer,

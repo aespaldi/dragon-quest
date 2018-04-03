@@ -43,7 +43,6 @@ class GetRandomDragon extends Component {
       <div>
         <DragonCard
           dragonId={this.generateDragonId}
-          randomMode={this.state.randomMode}
           imageurl={this.props.randomDragon.imageurl}
           type={this.props.randomDragon.type}
           level={this.props.randomDragon.level}

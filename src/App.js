@@ -66,6 +66,7 @@ class App extends Component {
         <div className="fight-screen-container">
           <Fight
             toggleFightMode={this.toggleFightMode}
+            fightMode={this.state.fightMode}
           />
         </div>
       )
