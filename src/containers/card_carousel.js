@@ -15,6 +15,7 @@ class ControlledCarousel extends Component {
     this.state = {
       index: 0,
       direction: null,
+      carouselMode: true,
     };
   }
 
@@ -50,6 +51,7 @@ class ControlledCarousel extends Component {
                 className="carousel-item">
                 <DragonCard
                   key={this.generateKey}
+                  carouselMode={this.state.carouselMode}
                   dragon={dragon}
                   imageurl={dragon.imageurl}
                   type={dragon.type}
