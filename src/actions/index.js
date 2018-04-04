@@ -9,6 +9,8 @@ export const SAVE_NEW_HUMAN = 'SAVE_NEW_HUMAN';
 export const UPDATE_HUMAN_HP = 'UPDATE_HUMAN_HP';
 export const UPDATE_DRAGON_HP = 'UPDATE_DRAGON_HP';
 export const SAVE_NEW_DRAGON = 'SAVE_NEW_DRAGON';
+export const MERGING_DRAGON = 'MERGING_DRAGON';
+export const CLEAR_MERGING_DRAGONS = 'CLEAR_MERGING_DRAGONS';
 
 // const ROOT_URL = `https://dragon-game-api.herokuapp.com`;
 const ROOT_URL = 'http://localhost:3001';
@@ -71,5 +73,19 @@ export function saveDragon(dragon) {
   return {
     type: SAVE_NEW_DRAGON,
     payload: dragon,
+  }
+}
+
+export function mergingDragon(dragon) {
+  return {
+    type: MERGING_DRAGON,
+    payload: dragon,
+  }
+}
+
+export function clearMergingDragons(nothing) {
+  return {
+    type: CLEAR_MERGING_DRAGONS,
+    payload: nothing,
   }
 }
