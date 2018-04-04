@@ -93,9 +93,9 @@ class Fight extends Component {
         }
       } else {
         this.displayWinnerMessage(player);
-      }
         const leveledUpHuman = this.levelUpHuman(this.props.human);
         this.props.saveHuman(leveledUpHuman);
+      }
     };
     // we start with the dragon's turn, because... dragons.
     battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
