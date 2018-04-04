@@ -52,6 +52,7 @@ class ControlledCarousel extends Component {
                 <DragonCard
                   key={this.generateKey}
                   carouselMode={this.state.carouselMode}
+                  mergeMode={this.props.mergeMode}
                   dragon={dragon}
                   imageurl={dragon.imageurl}
                   type={dragon.type}

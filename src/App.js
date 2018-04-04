@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import './App.css';
 import CardCarousel from './containers/card_carousel';
 import GetRandomDragon from './containers/get_random_dragon';
+import MergeContainer from './containers/merge_container.js'
 import Fight from './containers/fightMode';
+import { clearMergingDragons } from './actions';
 
 class App extends Component {
   constructor(props) {
@@ -13,12 +15,15 @@ class App extends Component {
       randomDragonVisible: false,
       dragonCollectionVisible: true,
       fightMode: false,
+      mergeMode: false,
     }
 
-    this.callDragon = this.callDragon.bind(this);
     this.acceptDragon = this.acceptDragon.bind(this);
+    this.callDragon = this.callDragon.bind(this);
+    this.renderCallDragonBtn = this.renderCallDragonBtn.bind(this);
+    this.renderMergeBtn = this.renderMergeBtn.bind(this);
     this.toggleFightMode = this.toggleFightMode.bind(this);
-
+    this.toggleMergeMode = this.toggleMergeMode.bind(this);
   }
 
   callDragon() {
@@ -45,6 +50,54 @@ class App extends Component {
     }
   }
 
+  toggleMergeMode() {
+    if (this.state.mergeMode) {
+      const data = [];
+      this.props.clearMergingDragons(data);
+      this.setState({
+        mergeMode: false,
+      })
+    } else {
+      this.setState({
+        mergeMode: true,
+      })
+    }
+  }
+
+  renderCallDragonBtn() {
+    if (!this.state.mergeMode) {
+      return (
+        <span>
+          <button id="dragon-call-btn" className="btn btn-success" onClick={this.callDragon}>
+            Call Dragon
+          </button>
+        </span>
+      );
+    }
+  }
+
+  renderMergeBtn() {
+    if(!this.state.mergeMode) {
+      return (
+        <span>
+          <button id="dragon-merge-btn" className="btn btn-info" onClick={this.toggleMergeMode}>
+            Merge Mode
+          </button>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <button id="dragon-merge-btn" className="btn btn-info" onClick={this.toggleMergeMode}>
+            Return to Village
+          </button>
+        </span>
+      );
+    }
+  }
+
+
+
   render() {
     let mainView = null;
     let randomDragon = null;
@@ -67,6 +120,7 @@ class App extends Component {
           <Fight
             toggleFightMode={this.toggleFightMode}
             fightMode={this.state.fightMode}
+            mergeMode={this.state.mergeMode}
           />
         </div>
       )
@@ -76,16 +130,16 @@ class App extends Component {
           <h1>Dragon Quest</h1>
           <div className="dragon-collection-description">
             <p>Call a dragon and accept her to add her to your defense squad, or send her away to try for another type! You can only have ten at any given time. Click "fight" on a dragon's card to face off against a human that blunders into the village. Each successive human you face might be a little bit harder. You will level up after a successful battle, or you can merge two dragons for a chance to create a powerful new dragon.</p>
-            <button id="dragon-call-btn" className="btn btn-success" onClick={this.callDragon}>
-              Call Dragon
-            </button>
-            <button id="dragon-merge-btn" className="btn btn-info">
-              Merge Dragons
-            </button>
+            <div className="control-btns">
+              {this.renderCallDragonBtn()}
+              {this.renderMergeBtn()}
+            </div>
           </div>
+          <MergeContainer />
           <div className="carousel">
             <CardCarousel
               toggleFightMode={this.toggleFightMode}
+              mergeMode={this.state.mergeMode}
             />
           </div>
           {randomDragon}
@@ -101,8 +155,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ fightMode }) => {
+const mapStateToProps = ({ fightMode, mergingDragons }) => {
   return { fightMode };
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { clearMergingDragons })(App);
