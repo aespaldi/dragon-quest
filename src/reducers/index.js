@@ -5,8 +5,10 @@ import EnterFightModeReducer from './reducer_enter_fight';
 import FightingDragonReducer from './reducer_fighting_dragon';
 import HumanReducer from './reducer_human';
 import MergingDragonsReducer from './reducer_merging_dragons';
+import AllDragonsReducer from './reducer_all_dragons';
 
 const rootReducer = combineReducers({
+  getAllDragonsForLevel: AllDragonsReducer,
   dragons: DragonsReducer,
   fightMode: EnterFightModeReducer,
   fightingDragon: FightingDragonReducer,

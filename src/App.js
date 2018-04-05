@@ -5,7 +5,7 @@ import CardCarousel from './containers/card_carousel';
 import GetRandomDragon from './containers/get_random_dragon';
 import MergeContainer from './containers/merge_container.js'
 import Fight from './containers/fightMode';
-import { clearMergingDragons } from './actions';
+import { mergingDragon, clearMergingDragons } from './actions';
 
 class App extends Component {
   constructor(props) {
@@ -16,12 +16,14 @@ class App extends Component {
       dragonCollectionVisible: true,
       fightMode: false,
       mergeMode: false,
+      mergeContainer: false,
     }
 
     this.acceptDragon = this.acceptDragon.bind(this);
     this.callDragon = this.callDragon.bind(this);
     this.renderCallDragonBtn = this.renderCallDragonBtn.bind(this);
     this.renderMergeBtn = this.renderMergeBtn.bind(this);
+    this.renderMergeContainer = this.renderMergeContainer.bind(this);
     this.toggleFightMode = this.toggleFightMode.bind(this);
     this.toggleMergeMode = this.toggleMergeMode.bind(this);
   }
@@ -64,6 +66,8 @@ class App extends Component {
     }
   }
 
+  // all of the view functions.
+
   renderCallDragonBtn() {
     if (!this.state.mergeMode) {
       return (
@@ -96,9 +100,40 @@ class App extends Component {
     }
   }
 
+  renderMergePossibleMode() {
+    if (this.props.mergingDragons && this.props.mergingDragons.length >= 2) {
+      return (
+        <div>
+          <button className="merge-mode-btn btn btn-danger" onClick={this.renderMergeContainer}>Prepare To Merge</button>
+        </div>
+      );
+    }
+  }
 
+  renderMergeContainer() {
+    this.setState({
+      mergeContainer: true,
+    })
+  }
+
+  renderHelpText() {
+    if (this.state.mergeMode) {
+      return (
+        <p>
+          Scroll through your cards and click 'Merge' to add a dragon to your mergelist. You can only merge two, and you cannot merge the same dragon twice. When you think you have your winning combination, click 'Prepare to Merge' to finalize your choice.
+        </p>
+      );
+    } else {
+      return (
+        <p>
+          Call a dragon and accept her to add her to your defense squad, or send her away to try for another type! You can only have ten at any given time. Click "fight" on a dragon's card to face off against a human that blunders into the village. Each successive human you face might be a little bit harder. You will level up after a successful battle, or you can merge two dragons for a chance to create a powerful new dragon.
+        </p>
+      );
+    }
+  }
 
   render() {
+    console.log('this.props', this.props);
     let mainView = null;
     let randomDragon = null;
 
@@ -124,18 +159,22 @@ class App extends Component {
           />
         </div>
       )
+    } else if (this.state.mergeContainer) {
+      mainView = <div>
+        <MergeContainer />
+      </div>
     } else {
       mainView = (
         <div>
           <h1>Dragon Quest</h1>
           <div className="dragon-collection-description">
-            <p>Call a dragon and accept her to add her to your defense squad, or send her away to try for another type! You can only have ten at any given time. Click "fight" on a dragon's card to face off against a human that blunders into the village. Each successive human you face might be a little bit harder. You will level up after a successful battle, or you can merge two dragons for a chance to create a powerful new dragon.</p>
+            {this.renderHelpText()}
             <div className="control-btns">
               {this.renderCallDragonBtn()}
               {this.renderMergeBtn()}
+              {this.renderMergePossibleMode()}
             </div>
           </div>
-          <MergeContainer />
           <div className="carousel">
             <CardCarousel
               toggleFightMode={this.toggleFightMode}
@@ -156,7 +195,7 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ fightMode, mergingDragons }) => {
-  return { fightMode };
+  return { fightMode, mergingDragons };
 };
 
-export default connect(mapStateToProps, { clearMergingDragons })(App);
+export default connect(mapStateToProps, { clearMergingDragons, mergingDragon })(App);

@@ -114,18 +114,6 @@ class Fight extends Component {
     return newHuman;
   };
 
-  levelUpDragon(dragon) {
-    console.log('the levelUpDragon function is being called');
-    const newDragon = Object.assign(this.props.fightingDragon, {
-      level: this.props.fightingDragon.level + 1,
-      currenthp: Math.round(this.props.fightingDragon.maxhp + (this.props.fightingDragon.maxhp * .10)),
-      maxhp: Math.round(this.props.fightingDragon.maxhp + (this.props.fightingDragon.maxhp * .10)),
-      strength: Math.round(this.props.fightingDragon.strength + (this.props.fightingDragon.strength * .15)),
-      defense: Math.round(this.props.fightingDragon.defense + (this.props.fightingDragon.defense * .15)),
-    })
-    return newDragon;
-  }
-
   // View functions:
 
   // displays a winner message in the DOM
