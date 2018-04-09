@@ -40,6 +40,8 @@ class App extends Component {
     })
   }
 
+  // toggle functions for view.
+
   toggleFightMode() {
     if (this.state.fightMode) {
       this.setState({
