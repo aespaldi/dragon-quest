@@ -35,7 +35,6 @@ class Fight extends Component {
   updateHumanStats(hp) {
     const humanAfterDamage = Object.assign(this.props.human, {currenthp: hp});
     this.props.updateHumanHP(humanAfterDamage);
-    console.log('this.props.human after update', this.props.human);
   }
 
   updateDragonStats(hp) {
@@ -62,8 +61,7 @@ class Fight extends Component {
     if (damageToHuman < 0) {
       damageToHuman = 0;
     }
-    console.log('base level damageToHuman', damageToHuman);
-
+    
     let damageToDragon = humanStrength - dragonDefense;
     if (damageToDragon < 0) {
       damageToDragon = 0;
