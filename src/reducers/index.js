@@ -6,6 +6,7 @@ import FightingDragonReducer from './reducer_fighting_dragon';
 import HumanReducer from './reducer_human';
 import MergingDragonsReducer from './reducer_merging_dragons';
 import AllDragonsReducer from './reducer_all_dragons';
+import shinyNewDragonReducer from './reducer_new_dragon';
 
 const rootReducer = combineReducers({
   getAllDragonsForLevel: AllDragonsReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   human: HumanReducer,
   mergingDragons: MergingDragonsReducer,
   randomDragon: RandomDragonReducer,
+  shinyNewDragon: shinyNewDragonReducer,
 });
 
 export default rootReducer;

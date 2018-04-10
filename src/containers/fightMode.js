@@ -23,7 +23,6 @@ class Fight extends Component {
     this.changeActiveCard = this.changeActiveCard.bind(this);
     this.levelUpHuman = this.levelUpHuman.bind(this);
     this.displayWinnerMessage = this.displayWinnerMessage.bind(this);
-    this.levelUpDragon = this.levelUpDragon.bind(this);
   }
 
   componentDidMount() {

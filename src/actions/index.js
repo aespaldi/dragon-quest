@@ -11,7 +11,8 @@ export const UPDATE_DRAGON_HP = 'UPDATE_DRAGON_HP';
 export const SAVE_NEW_DRAGON = 'SAVE_NEW_DRAGON';
 export const MERGING_DRAGON = 'MERGING_DRAGON';
 export const CLEAR_MERGING_DRAGONS = 'CLEAR_MERGING_DRAGONS';
-export const GET_DRAGON_LIST = 'GET_DRAGON_LIST'
+export const GET_DRAGON_LIST = 'GET_DRAGON_LIST';
+export const REMOVE_DRAGON = 'REMOVE_DRAGON';
 
 // const ROOT_URL = `https://dragon-game-api.herokuapp.com`;
 const ROOT_URL = 'http://localhost:3001';
@@ -29,6 +30,13 @@ export function getRandomDragon(level) {
 export function addToUserDragons(dragon) {
   return {
     type: ADD_DRAGON,
+    payload: dragon,
+  }
+}
+
+export function removeFromUserDragons(dragon) {
+  return {
+    type: REMOVE_DRAGON,
     payload: dragon,
   }
 }

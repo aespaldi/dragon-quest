@@ -23,7 +23,7 @@ class App extends Component {
     this.callDragon = this.callDragon.bind(this);
     this.renderCallDragonBtn = this.renderCallDragonBtn.bind(this);
     this.renderMergeBtn = this.renderMergeBtn.bind(this);
-    this.renderMergeContainer = this.renderMergeContainer.bind(this);
+    this.toggleMergeContainer = this.toggleMergeContainer.bind(this);
     this.toggleFightMode = this.toggleFightMode.bind(this);
     this.toggleMergeMode = this.toggleMergeMode.bind(this);
   }
@@ -106,16 +106,22 @@ class App extends Component {
     if (this.props.mergingDragons && this.props.mergingDragons.length >= 2) {
       return (
         <div>
-          <button className="merge-mode-btn btn btn-danger" onClick={this.renderMergeContainer}>Prepare To Merge</button>
+          <button className="merge-mode-btn btn btn-danger" onClick={this.toggleMergeContainer}>Prepare To Merge</button>
         </div>
       );
     }
   }
 
-  renderMergeContainer() {
-    this.setState({
-      mergeContainer: true,
-    })
+  toggleMergeContainer() {
+    if (this.state.mergeContainer) {
+      this.setState({
+        mergeContainer: false,
+      })
+    } else {
+      this.setState({
+        mergeContainer: true,
+      })
+    }
   }
 
   renderHelpText() {
@@ -163,7 +169,10 @@ class App extends Component {
       )
     } else if (this.state.mergeContainer) {
       mainView = <div>
-        <MergeContainer />
+        <MergeContainer
+          toggleMergeContainer={this.toggleMergeContainer}
+          toggleMergeMode={this.toggleMergeMode}
+         />
       </div>
     } else {
       mainView = (
