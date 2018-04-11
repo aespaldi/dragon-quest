@@ -17,22 +17,25 @@ class MergeContainer extends Component {
 
   levelUpDragon(dragon) {
     const newDragon = {
-      // remember to change this hardcoded value!
-      id: 27,
+      id: this.props.mergingDragons[0].id,
       type: this.props.mergingDragons[0].type,
+      imageurl: this.props.mergingDragons[0].imageurl,
+      dragonId: this.props.mergingDragons[0].dragonId,
       level: this.props.mergingDragons[0].level + 1,
       currenthp: Math.round(this.props.mergingDragons[0].maxhp + (this.props.mergingDragons[0].maxhp * .10)),
       maxhp: Math.round(this.props.mergingDragons[0].maxhp + (this.props.mergingDragons[0].maxhp * .10)),
       strength: Math.round(this.props.mergingDragons[0].strength + (this.props.mergingDragons[0].strength * .15)),
       defense: Math.round(this.props.mergingDragons[0].defense + (this.props.mergingDragons[0].defense * .15)),
-      imageurl: this.props.mergingDragons[0].imageurl,
     }
     return newDragon;
   }
 
-  createSuperDragon() {
+  componentDidMount() {
     // first, call all new dragons from the appropriate level.
     this.props.getAllDragonsForLevel(2)
+  }
+
+  createSuperDragon() {
     // determine which of these is an appropriate color match.
     const colors = this.props.mergingDragons.map((dragon) => {
       return dragon.type;
@@ -40,21 +43,21 @@ class MergeContainer extends Component {
     const dragonIds = this.props.mergingDragons.map((dragon) => {
       return dragon.dragonId;
     })
-    console.log('dragonIds', dragonIds);
     if (colors[0] === colors[1]) {
       const leveledUpDragon = this.levelUpDragon(this.props.mergingDragons[0]);
-      console.log('leveledUpDragon', leveledUpDragon);
       // add the dragon to the shinyNewDragon store so it can be displayed.
       this.props.saveDragon(leveledUpDragon);
-      console.log('this.props.shinyNewDragon', this.props.shinyNewDragon);
-      // add the chosen dragon to the dragons array. (addToUserDragons())
-      this.props.addToUserDragons(this.props.shinyNewDragon);
+
       this.props.dragons.forEach((dragon) => {
         // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
         if (dragonIds.includes(dragon.dragonId)) {
-          this.props.removeFromUserDragons(dragon);
+          // we need to find the index of the dragon before doing splice.
+          const index = this.props.dragons.indexOf(dragon);
+          this.props.removeFromUserDragons(index);
         }
       })
+      // add the chosen dragon to the dragons array. (addToUserDragons())
+      this.props.addToUserDragons(leveledUpDragon);
     }
   }
 
