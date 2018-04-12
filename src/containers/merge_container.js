@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, getDragonById, removeFromUserDragons, saveDragon } from '../actions';
+import { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
 import DragonCard from './dragon_card';
 import './merge_container.css';
 
@@ -44,7 +44,7 @@ class MergeContainer extends Component {
     this.props.dragons.forEach((dragon) => {
       // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
       if (dragonIds.includes(dragon.dragonId)) {
-        // we need to find the index of the dragon before doing splice.
+        // finds the index to pass into the action creator.
         const index = this.props.dragons.indexOf(dragon);
         this.props.removeFromUserDragons(index);
       }
@@ -92,18 +92,20 @@ class MergeContainer extends Component {
           <p>Merging dragons is an irreversible and slightly unpredictable action. The two dragons you have selected will disappear forever and be replaced with one new dragon whose level will be guaranteed to be at least one level higher than your LOWEST LEVEL dragon. You may simply get a stronger version of what you already have, or if you're lucky, you may get a special dragon with the combined powers of the previous two!</p>
           <button className="btn btn-success" onClick={this.createSuperDragon}>Let's Do This!</button>
           <button className="btn btn-danger">Changed My Mind!</button>
-          {this.props.mergingDragons.map(dragon =>
-            <DragonCard
-              key={dragon.id}
-              imageurl={dragon.imageurl}
-              type={dragon.type}
-              level={dragon.level}
-              currenthp={dragon.currenthp}
-              maxhp={dragon.maxhp}
-              strength={dragon.strength}
-              defense={dragon.defense}
-            />
-          )}
+          <div className="dragons-to-merge">
+            {this.props.mergingDragons.map(dragon =>
+              <DragonCard
+                key={dragon.dragonId}
+                imageurl={dragon.imageurl}
+                type={dragon.type}
+                level={dragon.level}
+                currenthp={dragon.currenthp}
+                maxhp={dragon.maxhp}
+                strength={dragon.strength}
+                defense={dragon.defense}
+              />
+            )}
+          </div>
         </div>
       );
     }
