@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
+import { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, getDragonById, removeFromUserDragons, saveDragon } from '../actions';
 import DragonCard from './dragon_card';
 import './merge_container.css';
 
@@ -13,26 +13,55 @@ class MergeContainer extends Component {
     this.renderMergingDragons = this.renderMergingDragons.bind(this);
     this.renderNewDragon = this.renderNewDragon.bind(this);
     this.returnToVillage = this.returnToVillage.bind(this);
+    this.saveNewDragon = this.saveNewDragon.bind(this);
+    this.createDragonChoiceArray = this.createDragonChoiceArray.bind(this);
   }
 
   levelUpDragon(dragon) {
     const newDragon = {
-      id: this.props.mergingDragons[0].id,
-      type: this.props.mergingDragons[0].type,
-      imageurl: this.props.mergingDragons[0].imageurl,
-      dragonId: this.props.mergingDragons[0].dragonId,
-      level: this.props.mergingDragons[0].level + 1,
-      currenthp: Math.round(this.props.mergingDragons[0].maxhp + (this.props.mergingDragons[0].maxhp * .10)),
-      maxhp: Math.round(this.props.mergingDragons[0].maxhp + (this.props.mergingDragons[0].maxhp * .10)),
-      strength: Math.round(this.props.mergingDragons[0].strength + (this.props.mergingDragons[0].strength * .15)),
-      defense: Math.round(this.props.mergingDragons[0].defense + (this.props.mergingDragons[0].defense * .15)),
+      id: dragon.id,
+      type: dragon.type,
+      imageurl: dragon.imageurl,
+      dragonId: dragon.dragonId,
+      level: dragon.level + 1,
+      currenthp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
+      maxhp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
+      strength: Math.round(dragon.strength + (dragon.strength * .15)),
+      defense: Math.round(dragon.defense + (dragon.defense * .15)),
     }
     return newDragon;
   }
 
   componentDidMount() {
-    // first, call all new dragons from the appropriate level.
     this.props.getAllDragonsForLevel(2)
+  }
+
+  saveNewDragon(newDragon) {
+    const dragonIds = this.props.mergingDragons.map((dragon) => {
+      return dragon.dragonId;
+    })
+    this.props.saveDragon(newDragon);
+    this.props.dragons.forEach((dragon) => {
+      // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
+      if (dragonIds.includes(dragon.dragonId)) {
+        // we need to find the index of the dragon before doing splice.
+        const index = this.props.dragons.indexOf(dragon);
+        this.props.removeFromUserDragons(index);
+      }
+    })
+    // add the chosen dragon to the dragons array. (addToUserDragons())
+    this.props.addToUserDragons(newDragon);
+  }
+
+  createDragonChoiceArray(dragonIndex) {
+    const dragonArray = [];
+    const firstDragon = this.levelUpDragon(this.props.mergingDragons[0]);
+    const secondDragon = this.levelUpDragon(this.props.mergingDragons[1]);
+    const specialDragon = this.props.allDragonsForLevel[dragonIndex];
+    dragonArray.push(firstDragon, secondDragon, specialDragon);
+    const index = Math.floor(Math.random() * 3);
+    const chosenDragon = dragonArray[index];
+    this.saveNewDragon(chosenDragon);
   }
 
   createSuperDragon() {
@@ -40,26 +69,21 @@ class MergeContainer extends Component {
     const colors = this.props.mergingDragons.map((dragon) => {
       return dragon.type;
     })
-    const dragonIds = this.props.mergingDragons.map((dragon) => {
-      return dragon.dragonId;
-    })
+    // if the colors are the same, just level up the first dragon.
     if (colors[0] === colors[1]) {
       const leveledUpDragon = this.levelUpDragon(this.props.mergingDragons[0]);
       // add the dragon to the shinyNewDragon store so it can be displayed.
-      this.props.saveDragon(leveledUpDragon);
-
-      this.props.dragons.forEach((dragon) => {
-        // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
-        if (dragonIds.includes(dragon.dragonId)) {
-          // we need to find the index of the dragon before doing splice.
-          const index = this.props.dragons.indexOf(dragon);
-          this.props.removeFromUserDragons(index);
-        }
-      })
-      // add the chosen dragon to the dragons array. (addToUserDragons())
-      this.props.addToUserDragons(leveledUpDragon);
+      this.saveNewDragon(leveledUpDragon);
+      } else if (colors.includes('red') && colors.includes('blue')) {
+        this.createDragonChoiceArray(0);
+      } else if (colors.includes('blue') && colors.includes('yellow')) {
+        this.createDragonChoiceArray(1);
+      } else if (colors.includes('red') && colors.includes('yellow')) {
+        this.createDragonChoiceArray(2);
+      } else {
+        throw new Error('invalid color inputs');
+      }
     }
-  }
 
   renderMergingDragons() {
     if (!this.props.shinyNewDragon.type) {
@@ -124,8 +148,8 @@ class MergeContainer extends Component {
   };
 };
 
-function mapStateToProps({ dragons, mergingDragons, shinyNewDragon }) {
-  return { dragons, mergingDragons, shinyNewDragon }
+function mapStateToProps({ allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }) {
+  return { allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }
 };
 
 export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, removeFromUserDragons, saveDragon })(MergeContainer);

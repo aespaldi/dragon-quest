@@ -13,6 +13,7 @@ export const MERGING_DRAGON = 'MERGING_DRAGON';
 export const CLEAR_MERGING_DRAGONS = 'CLEAR_MERGING_DRAGONS';
 export const GET_DRAGON_LIST = 'GET_DRAGON_LIST';
 export const REMOVE_DRAGON = 'REMOVE_DRAGON';
+export const DRAGON_BY_ID = 'DRAGON_BY_ID';
 
 // const ROOT_URL = `https://dragon-game-api.herokuapp.com`;
 const ROOT_URL = 'http://localhost:3001';
@@ -23,6 +24,16 @@ export function getRandomDragon(level) {
 
   return {
     type: GET_RANDOM_DRAGON,
+    payload: request,
+  }
+}
+
+export function getDragonById(id) {
+  const url = `${ROOT_URL}/dragons/${id}`;
+  const request = axios.get(url);
+
+  return {
+    type: DRAGON_BY_ID,
     payload: request,
   }
 }
