@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
+import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
 import DragonCard from './dragon_card';
 import './merge_container.css';
 
@@ -15,6 +15,14 @@ class MergeContainer extends Component {
     this.returnToVillage = this.returnToVillage.bind(this);
     this.saveNewDragon = this.saveNewDragon.bind(this);
     this.createDragonChoiceArray = this.createDragonChoiceArray.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getAllDragonsForLevel(2)
+  }
+
+  componentWillUnmount() {
+    this.props.clearNewDragon();
   }
 
   levelUpDragon(dragon) {
@@ -32,9 +40,6 @@ class MergeContainer extends Component {
     return newDragon;
   }
 
-  componentDidMount() {
-    this.props.getAllDragonsForLevel(2)
-  }
 
   saveNewDragon(newDragon) {
     const dragonIds = this.props.mergingDragons.map((dragon) => {
@@ -154,4 +159,4 @@ function mapStateToProps({ allDragonsForLevel, dragons, mergingDragons, shinyNew
   return { allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }
 };
 
-export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, getAllDragonsForLevel, removeFromUserDragons, saveDragon })(MergeContainer);
+export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon })(MergeContainer);

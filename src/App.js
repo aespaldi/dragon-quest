@@ -23,9 +23,12 @@ class App extends Component {
     this.callDragon = this.callDragon.bind(this);
     this.renderCallDragonBtn = this.renderCallDragonBtn.bind(this);
     this.renderMergeBtn = this.renderMergeBtn.bind(this);
+    this.renderRandomDragonContainer = this.renderRandomDragonContainer.bind(this);
     this.toggleMergeContainer = this.toggleMergeContainer.bind(this);
     this.toggleFightMode = this.toggleFightMode.bind(this);
     this.toggleMergeMode = this.toggleMergeMode.bind(this);
+    this.renderFightView = this.renderFightView.bind(this);
+    this.renderMainView = this.renderMainView.bind(this);
   }
 
   callDragon() {
@@ -140,25 +143,21 @@ class App extends Component {
     }
   }
 
-  render() {
-    console.log('this.props', this.props);
-    let mainView = null;
-    let randomDragon = null;
-
+  renderRandomDragonContainer() {
     if (this.state.randomDragonVisible) {
-      randomDragon = (
+      return (
         <div className="dragon-selection-container">
           <GetRandomDragon
             acceptDragon={this.acceptDragon}
           />
-            <div className="dragon-selection-description">
-          </div>
         </div>
       )
     }
+  }
 
+  renderFightView() {
     if (this.state.fightMode) {
-      mainView = (
+      return (
         <div className="fight-screen-container">
           <Fight
             toggleFightMode={this.toggleFightMode}
@@ -166,20 +165,28 @@ class App extends Component {
             mergeMode={this.state.mergeMode}
           />
         </div>
-      )
-    } else if (this.state.mergeContainer) {
-      mainView = <div>
-        <MergeContainer
-          toggleMergeContainer={this.toggleMergeContainer}
-          toggleMergeMode={this.toggleMergeMode}
-         />
-      </div>
-    } else {
-      mainView = (
+      );
+    }
+  }
+
+  renderMergeView() {
+    if (this.state.mergeContainer) {
+      return (
         <div>
-          <h1>Dragon Quest</h1>
+          <MergeContainer
+            toggleMergeContainer={this.toggleMergeContainer}
+            toggleMergeMode={this.toggleMergeMode}
+           />
+        </div>
+      );
+    }
+  }
+
+  renderMainView() {
+    if (!this.state.randomDragonVisible && !this.state.fightMode && !this.state.mergeContainer) {
+      return (
+        <div>
           <div className="dragon-collection-description">
-            {this.renderHelpText()}
             <div className="control-btns">
               {this.renderCallDragonBtn()}
               {this.renderMergeBtn()}
@@ -192,18 +199,25 @@ class App extends Component {
               mergeMode={this.state.mergeMode}
             />
           </div>
-          {randomDragon}
         </div>
-      )
+      );
     }
+};
 
-    return (
-      <div className="App">
-        {mainView}
-      </div>
-    );
-  }
+
+  render() {
+      return (
+        <div className="App">
+          <h1>Dragon Quest</h1>
+          {this.renderFightView()}
+          {this.renderMergeView()}
+          {this.renderRandomDragonContainer()}
+          {this.renderMainView()}
+        </div>
+      );
+    }
 }
+
 
 const mapStateToProps = ({ fightMode, mergingDragons }) => {
   return { fightMode, mergingDragons };
