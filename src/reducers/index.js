@@ -6,13 +6,11 @@ import FightingDragonReducer from './reducer_fighting_dragon';
 import HumanReducer from './reducer_human';
 import MergingDragonsReducer from './reducer_merging_dragons';
 import AllDragonsReducer from './reducer_all_dragons';
-import DragonLevelUpOptionsReducer from './reducer_dragon_options';
 import shinyNewDragonReducer from './reducer_new_dragon';
 
 const rootReducer = combineReducers({
   allDragonsForLevel: AllDragonsReducer,
   dragons: DragonsReducer,
-  dragonOptions: DragonLevelUpOptionsReducer,
   fightMode: EnterFightModeReducer,
   fightingDragon: FightingDragonReducer,
   human: HumanReducer,
