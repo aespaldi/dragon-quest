@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, getRandomDragon } from '../actions';
 import generateRandomNumber from '../helpers';
@@ -63,6 +64,12 @@ class GetRandomDragon extends Component {
   }
 }
 
+GetRandomDragon.propTypes = {
+  addToUserDragons: PropTypes.func,
+  acceptDragon: PropTypes.func,
+  getRandomDragon: PropTypes.func,
+  randomDragon: PropTypes.object,
+}
 
 function mapStateToProps({ dragons, randomDragon }) {
   return { dragons, randomDragon };
