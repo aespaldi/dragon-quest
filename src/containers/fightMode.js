@@ -205,7 +205,9 @@ class Fight extends Component {
     return (
       <div>
         <h2>Battle Screen</h2>
-        <p className="fight-intro-text">This human is trying to get glory. If you win, you level up and you get to enjoy your picnic. If you lose, say goodbye to your HP and your peaceful afternoon.</p>
+        <p className="fight-intro-text">This human is trying to get glory, or just simply wandered in. Dispatch them quickly to go back to your peaceful afternoon. Warning - they keep getting stronger. If you find yourself losing, you may need to merge some dragons to become stronger!</p>
+        <h3>{this.state.winner}</h3>
+        {returnBtn}
         <div className="fight-container">
           <div className="fight-card">
             <DragonCard
@@ -231,9 +233,7 @@ class Fight extends Component {
             />
           </div>
         </div>
-        <h4>{this.state.winner}</h4>
         {enterBattleBtn}
-        {returnBtn}
       </div>
     )
   }
