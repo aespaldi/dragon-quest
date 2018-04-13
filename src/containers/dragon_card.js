@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { enterFightMode, mergingDragon } from '../actions';
 
@@ -56,6 +57,20 @@ class DragonCard extends Component {
     );
   }
 }
+
+DragonCard.propTypes = {
+  type: PropTypes.string,
+  level: PropTypes.number,
+  currenthp: PropTypes.number,
+  maxhp: PropTypes.number,
+  strength: PropTypes.number,
+  defense: PropTypes.number,
+  enterFightMode: PropTypes.func,
+  mergingDragon: PropTypes.func,
+  toggleFightMode: PropTypes.func,
+  carouselMode: PropTypes.bool,
+  mergeMode: PropTypes.bool,
+};
 
 function mapStateToProps({ fightMode, mergingDragons }) {
   return { fightMode, mergingDragons };
