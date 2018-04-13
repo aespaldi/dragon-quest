@@ -1,8 +1,8 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+import { addToUserDragons, getRandomDragon } from '../actions';
+import generateRandomNumber from '../helpers';
 import DragonCard from '../containers/dragon_card.js';
-import { getRandomDragon } from '../actions';
-import { addToUserDragons } from '../actions';
 import './get_random_dragon.css';
 
 class GetRandomDragon extends Component {
@@ -13,30 +13,33 @@ class GetRandomDragon extends Component {
       randomMode: true,
     }
 
-    this.getNewDragon = this.getNewDragon.bind(this);
     this.addDragonToCollection = this.addDragonToCollection.bind(this);
-    this.generateDragonId = this.generateDragonId.bind(this);
+    this.getNewDragon = this.getNewDragon.bind(this);
   }
 
   componentDidMount() {
     this.props.getRandomDragon(1);
   }
 
-  getNewDragon() {
-    this.props.getRandomDragon(1);
-  }
-
-  generateDragonId() {
-    const randomNum = Math.floor(Math.random() * 1000);
-    return `${randomNum}_${new Date().getTime()}`
-  }
+  /**
+  * @function addDragonToCollection - assigns a unique ID to the dragon the random dragon the user selects and then calls the redux action creator that adds the random dragon to the dragons array.
+  * @returns {undefined} - calls other functions, returns nothing.
+  */
 
   addDragonToCollection() {
-    this.props.randomDragon.dragonId = this.generateDragonId();
+    this.props.randomDragon.dragonId = generateRandomNumber();
     this.props.addToUserDragons(this.props.randomDragon)
     this.props.acceptDragon();
   }
 
+  /**
+  * @function getNewDragon - grabs a new dragon from the database of the passed in level.
+  * @returns {undefined} - function calls a redux store function and returns nothing.
+  */
+
+  getNewDragon() {
+    this.props.getRandomDragon(1);
+  }
 
   render() {
     return (

@@ -10,19 +10,19 @@ class Fight extends Component {
     super(props);
 
     this.state = {
-      winner: null,
-      dragonCardBackGround: 'black',
-      humanCardBackGround: 'black',
       battleEntered: false,
       battleMode: true,
+      dragonCardBackGround: 'black',
+      humanCardBackGround: 'black',
+      winner: null,
     }
 
-    this.updateHumanStats = this.updateHumanStats.bind(this);
-    this.updateDragonStats = this.updateDragonStats.bind(this);
-    this.enterBattle = this.enterBattle.bind(this);
     this.changeActiveCard = this.changeActiveCard.bind(this);
-    this.levelUpHuman = this.levelUpHuman.bind(this);
     this.displayWinnerMessage = this.displayWinnerMessage.bind(this);
+    this.enterBattle = this.enterBattle.bind(this);
+    this.levelUpHuman = this.levelUpHuman.bind(this);
+    this.updateDragonStats = this.updateDragonStats.bind(this);
+    this.updateHumanStats = this.updateHumanStats.bind(this);
   }
 
   componentDidMount() {
@@ -31,15 +31,10 @@ class Fight extends Component {
     }
   }
 
-  updateHumanStats(hp) {
-    const humanAfterDamage = Object.assign(this.props.human, {currenthp: hp});
-    this.props.updateHumanHP(humanAfterDamage);
-  }
-
-  updateDragonStats(hp) {
-    const dragonAfterDamage = Object.assign(this.props.fightingDragon, {currenthp: hp});
-    this.props.updateDragonHP(dragonAfterDamage);
-  }
+  /**
+  * @function enterBattle - sets the initial damage values for each player and then calls battleTurn.
+  * @returns {undefined} - this is a higher order function that calls other functions.
+  */
 
   // the actual fight logic.
   enterBattle() {
@@ -65,9 +60,16 @@ class Fight extends Component {
     if (damageToDragon < 0) {
       damageToDragon = 0;
     }
-    console.log('base level damageToDragon', damageToDragon);
 
-    // takes in damage stats and current hp of active character and makes recursive calls alternating between characters until the reaching the base case of one character's hit points dropping to zero.
+    /**
+    * @function battleTurn - applies damage to each player in a single turn. called recursively until one player's hit points drop to or below zero.
+    *
+    * @param {number} hp - current hit points of the opposing player.
+    * @param {number} damage - the damage being dealt to the opposite player.
+    * @param {string} player - the type of player - either dragon or human.
+    * @returns {undefined} - the function either calls itself or redux action creators and never returns a value.
+    */
+
     const battleTurn = (hp, damage, player) => {
       let newHP = hp - damage;
       if (player === 'dragon') {
@@ -76,12 +78,8 @@ class Fight extends Component {
         this.updateDragonStats(newHP);
       }
 
-      console.log('current player', player);
-
       if (newHP > 0) {
-        console.log('newHP after update', newHP);
         if (player === 'human') {
-          console.log('player is human and newHP is greater than zero');
           this.changeActiveCard(player);
           battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
         } else {
@@ -99,8 +97,14 @@ class Fight extends Component {
   };
 
   // levels up the human character, regardless of battle outcome.
+
+  /**
+  * @function levelUpHuman - adds a percentage to the current human's stats and returns a new human.
+  * @returns {object} - returns an object representing the new stats for the human player.
+  *
+  */
+
   levelUpHuman() {
-    console.log('the levelUpHuman function is being called');
     const newHuman = Object.assign(this.props.human, {
       level: this.props.human.level + 1,
       currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
@@ -111,23 +115,36 @@ class Fight extends Component {
     return newHuman;
   };
 
+  /**
+  * @function updateDragonStats - creates a new dragon object with updated hp and passes it to a redux action creator that updates those stats in the store.
+  *
+  * @returns {undefined} - function calls another function and returns nothing.
+  */
+
+  updateDragonStats(hp) {
+    const dragonAfterDamage = Object.assign(this.props.fightingDragon, {currenthp: hp});
+    this.props.updateDragonHP(dragonAfterDamage);
+  };
+
+  /**
+  * @function updateHumanStats - creates a new human object with updated hp and passes it to a redux action creator that updates those stats in the store.
+  *
+  * @returns {undefined} - function calls another function and returns nothing.
+  */
+
+  updateHumanStats(hp) {
+    const humanAfterDamage = Object.assign(this.props.human, {currenthp: hp});
+    this.props.updateHumanHP(humanAfterDamage);
+  };
+
   // View functions:
 
-  // displays a winner message in the DOM
-  displayWinnerMessage(player) {
-    console.log('player inside of winner message', player);
-    if (player === 'dragon') {
-      this.setState({
-        winner: 'Dragon Wins!',
-      })
-    } else {
-      this.setState({
-        winner: 'Human Wins!',
-      })
-    }
-  }
+  /**
+  * @function changeActiveCard - changes background of active card to green.
+  * @param {string} type - the type of player, either dragon or human.
+  * @returns {undefined} - function calls two react functions and returns nothing.
+  */
 
-  // render animation to show who has the active turn. In progress.
   changeActiveCard(type) {
     if (type === 'dragon') {
       this.setState({
@@ -139,6 +156,25 @@ class Fight extends Component {
       })
     }
   };
+
+  /**
+  * @function displayWinnerMessage - displays a different message in the DOM based on which player reaches the win condition.
+  * @param {object} player - an object representing the player (dragon or human) that wins.
+  * @returns {undefined} - function calls react method setState and does not return anything.
+  */
+
+  // displays a winner message in the DOM
+  displayWinnerMessage(player) {
+    if (player === 'dragon') {
+      this.setState({
+        winner: 'Dragon Wins!',
+      })
+    } else {
+      this.setState({
+        winner: 'Human Wins!',
+      })
+    }
+  }
 
   render() {
 
