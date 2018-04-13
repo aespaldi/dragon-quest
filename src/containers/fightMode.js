@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { callHuman, saveHuman, updateHumanHP, updateDragonHP } from '../actions'
 import DragonCard from './dragon_card';
@@ -63,7 +64,6 @@ class Fight extends Component {
 
     /**
     * @function battleTurn - applies damage to each player in a single turn. called recursively until one player's hit points drop to or below zero.
-    *
     * @param {number} hp - current hit points of the opposing player.
     * @param {number} damage - the damage being dealt to the opposite player.
     * @param {string} player - the type of player - either dragon or human.
@@ -117,7 +117,6 @@ class Fight extends Component {
 
   /**
   * @function updateDragonStats - creates a new dragon object with updated hp and passes it to a redux action creator that updates those stats in the store.
-  *
   * @returns {undefined} - function calls another function and returns nothing.
   */
 
@@ -128,7 +127,6 @@ class Fight extends Component {
 
   /**
   * @function updateHumanStats - creates a new human object with updated hp and passes it to a redux action creator that updates those stats in the store.
-  *
   * @returns {undefined} - function calls another function and returns nothing.
   */
 
@@ -237,6 +235,15 @@ class Fight extends Component {
       </div>
     )
   }
+}
+
+Fight.propTypes = {
+  callHuman: PropTypes.func,
+  fightingDragon: PropTypes.object,
+  human: PropTypes.object,
+  saveHuman: PropTypes.func,
+  updateDragonHP: PropTypes.func,
+  updateHumanHP: PropTypes.func,
 }
 
 function mapStateToProps({ fightingDragon, human}) {
