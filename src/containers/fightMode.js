@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { callHuman, saveHuman, updateHumanHP, updateDragonHP } from '../actions'
 import DragonCard from './dragon_card';
 import HumanCard from '../components/human_card';
-import { callHuman, saveHuman, updateHumanHP, updateDragonHP } from '../actions'
 import './fightMode.css';
 
 class Fight extends Component {
@@ -60,7 +60,7 @@ class Fight extends Component {
     if (damageToHuman < 0) {
       damageToHuman = 0;
     }
-    
+
     let damageToDragon = humanStrength - dragonDefense;
     if (damageToDragon < 0) {
       damageToDragon = 0;
