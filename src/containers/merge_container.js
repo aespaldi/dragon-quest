@@ -140,7 +140,7 @@ class MergeContainer extends Component {
             defense={this.props.shinyNewDragon.defense}
           />
           <button
-            className="merge-success-return-btn"
+            className="merge-success-return-btn btn btn-success"
             onClick={this.returnToVillage}
             >Return to Village</button>
         </div>
