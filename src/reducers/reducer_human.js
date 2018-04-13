@@ -1,4 +1,4 @@
-import { SPAWN_HUMAN, SAVE_NEW_HUMAN, UPDATE_HUMAN_HP } from '../actions';
+import { SAVE_NEW_HUMAN, SPAWN_HUMAN, UPDATE_HUMAN_HP } from '../actions';
 
 export default function (state={}, action) {
   switch(action.type) {

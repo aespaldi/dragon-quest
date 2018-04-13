@@ -17,6 +17,10 @@ class DragonCard extends Component {
     this.props.enterFightMode(this.props.dragon)
   }
 
+  handleClick() {
+    this.props.mergingDragon(this.props.dragon);
+  }
+
   renderFightButton() {
     if (this.props.carouselMode && !this.props.mergeMode) {
       return (
@@ -25,10 +29,6 @@ class DragonCard extends Component {
         </div>
       )
     }
-  }
-
-  handleClick() {
-    this.props.mergingDragon(this.props.dragon);
   }
 
   renderMergeSelectors() {

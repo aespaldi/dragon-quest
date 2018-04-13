@@ -19,18 +19,33 @@ class ControlledCarousel extends Component {
     };
   }
 
-  handleSelect(selectedIndex, e) {
-    this.setState({
-      index: selectedIndex,
-      direction: e.direction
-    });
-  }
+  /**
+  * @function generateKey - creates unique key for each dragon added to the user dragons collection and rendered to the carousel, as the ids from the database are not unique enough.
+  *
+  * @returns {number}
+  */
 
   generateKey() {
     const randomNum = Math.floor(Math.random() * 10000);
     return `${randomNum}_${new Date().getTime()}`;
   }
 
+  /**
+  * @function handleSelect - part of React Bootstrap, necessary for the carousel to function.
+  *
+  * @param {number} selectedIndex - the index of the card currently being displayed on the screen.
+  * @param {object} e - the event object.
+  * @returns {undefined} - the function is calling this.setState and not returning any values.
+  *
+  */
+
+
+  handleSelect(selectedIndex, e) {
+    this.setState({
+      index: selectedIndex,
+      direction: e.direction
+    });
+  }
 
   render() {
     const { index, direction } = this.state;
