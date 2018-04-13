@@ -184,7 +184,7 @@ class MergeContainer extends Component {
   render() {
     return (
       <div>
-        <h1>Merge Mode</h1>
+        <h3 className="merge-mode-title">Merge Mode</h3>
         {this.renderMergingDragons()}
         {this.renderNewDragon()}
       </div>
