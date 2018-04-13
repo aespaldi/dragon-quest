@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Carousel from 'react-bootstrap/lib/Carousel';
 import DragonCard from '../containers/dragon_card.js';
-import { addToUserDragons } from '../actions/index';
+import { addToUserDragons } from '../actions/';
+import generateRandomNumber from '../helpers';
 import './card_carousel.css';
 
 class ControlledCarousel extends Component {
@@ -10,24 +11,12 @@ class ControlledCarousel extends Component {
     super(props, context);
 
     this.handleSelect = this.handleSelect.bind(this);
-    this.generateKey = this.generateKey.bind(this);
 
     this.state = {
       index: 0,
       direction: null,
       carouselMode: true,
     };
-  }
-
-  /**
-  * @function generateKey - creates unique key for each dragon added to the user dragons collection and rendered to the carousel, as the ids from the database are not unique enough.
-  *
-  * @returns {number}
-  */
-
-  generateKey() {
-    const randomNum = Math.floor(Math.random() * 10000);
-    return `${randomNum}_${new Date().getTime()}`;
   }
 
   /**
@@ -38,7 +27,6 @@ class ControlledCarousel extends Component {
   * @returns {undefined} - the function is calling this.setState and not returning any values.
   *
   */
-
 
   handleSelect(selectedIndex, e) {
     this.setState({
@@ -65,7 +53,7 @@ class ControlledCarousel extends Component {
                 key={index}
                 className="carousel-item">
                 <DragonCard
-                  key={this.generateKey}
+                  key={generateRandomNumber}
                   carouselMode={this.state.carouselMode}
                   mergeMode={this.props.mergeMode}
                   dragon={dragon}
