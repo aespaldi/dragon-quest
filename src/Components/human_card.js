@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './human_card.css';
 
 const HumanCard = (props) => {
@@ -13,5 +14,14 @@ const HumanCard = (props) => {
     </div>
   )
 };
+
+HumanCard.propTypes = {
+  currenthp: PropTypes.number,
+  defense: PropTypes.number,
+  imageurl: PropTypes.string,
+  level: PropTypes.number,
+  maxhp: PropTypes.number,
+  strength: PropTypes.number,
+}
 
 export default HumanCard;
