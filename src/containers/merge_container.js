@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
 import DragonCard from './dragon_card';
@@ -191,6 +192,21 @@ class MergeContainer extends Component {
     );
   };
 };
+
+MergeContainer.propTypes = {
+  allDragonsForLevel: PropTypes.array,
+  dragons: PropTypes.array,
+  mergingDragons: PropTypes.array,
+  shinyNewDragon: PropTypes.object,
+  addToUserDragons: PropTypes.func,
+  clearMergingDragons: PropTypes.func,
+  clearNewDragon: PropTypes.func,
+  getAllDragonsForLevel: PropTypes.func,
+  removeFromUserDragons: PropTypes.func,
+  saveDragon: PropTypes.func,
+  toggleMergeMode: PropTypes.func,
+  toggleMergeContainer: PropTypes.func,
+}
 
 function mapStateToProps({ allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }) {
   return { allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }
