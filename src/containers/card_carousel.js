@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Carousel from 'react-bootstrap/lib/Carousel';
 import DragonCard from '../containers/dragon_card.js';
@@ -21,7 +22,6 @@ class ControlledCarousel extends Component {
 
   /**
   * @function handleSelect - part of React Bootstrap, necessary for the carousel to function.
-  *
   * @param {number} selectedIndex - the index of the card currently being displayed on the screen.
   * @param {object} e - the event object.
   * @returns {undefined} - the function is calling this.setState and not returning any values.
@@ -85,6 +85,13 @@ class ControlledCarousel extends Component {
       </div>
         );
       }
+}
+
+ControlledCarousel.propTypes = {
+  addToUserDragons: PropTypes.func,
+  dragons: PropTypes.array,
+  mergeMode: PropTypes.bool,
+  toggleFightMode: PropTypes.func,
 }
 
 function mapStateToProps({ dragons }) {
