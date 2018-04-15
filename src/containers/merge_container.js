@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
+import generateRandomNumber from '../helpers';
 import DragonCard from './dragon_card';
 import './merge_container.css';
 
@@ -37,7 +38,8 @@ class MergeContainer extends Component {
     const firstDragon = this.levelUpDragon(this.props.mergingDragons[0]);
     const secondDragon = this.levelUpDragon(this.props.mergingDragons[1]);
     const specialDragon = this.props.allDragonsForLevel[dragonIndex];
-    dragonArray.push(firstDragon, secondDragon, specialDragon);
+    const specialDragonWithId = Object.assign({dragonId: generateRandomNumber()}, specialDragon);
+    dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
     const index = Math.floor(Math.random() * 3);
     const chosenDragon = dragonArray[index];
     this.saveNewDragon(chosenDragon);
@@ -80,7 +82,7 @@ class MergeContainer extends Component {
       id: dragon.id,
       type: dragon.type,
       imageurl: dragon.imageurl,
-      dragonId: dragon.dragonId,
+      dragonId: generateRandomNumber(),
       level: dragon.level + 1,
       currenthp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
       maxhp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
@@ -169,13 +171,13 @@ class MergeContainer extends Component {
     const dragonIds = this.props.mergingDragons.map((dragon) => {
       return dragon.dragonId;
     })
+    console.log('dragonIds from mergingDragons', dragonIds);
     this.props.saveDragon(newDragon);
     this.props.dragons.forEach((dragon) => {
       // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
       if (dragonIds.includes(dragon.dragonId)) {
         // finds the index to pass into the action creator.
-        const index = this.props.dragons.indexOf(dragon);
-        this.props.removeFromUserDragons(index);
+        this.props.removeFromUserDragons(dragon);
       }
     })
     // add the chosen dragon to the dragons array. (addToUserDragons())
