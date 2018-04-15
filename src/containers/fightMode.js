@@ -22,6 +22,7 @@ class Fight extends Component {
     this.displayWinnerMessage = this.displayWinnerMessage.bind(this);
     this.enterBattle = this.enterBattle.bind(this);
     this.levelUpHuman = this.levelUpHuman.bind(this);
+    this.renderFightIntroText = this.renderFightIntroText.bind(this);
     this.updateDragonStats = this.updateDragonStats.bind(this);
     this.updateHumanStats = this.updateHumanStats.bind(this);
   }
@@ -174,12 +175,14 @@ class Fight extends Component {
     }
   }
 
-  render() {
+  /**
+  * @function renderEnterBattleBtn - renders the button that the user clicks to enter the battle.
+  * @returns {JSX}
+  */
 
-    let enterBattleBtn = null;
-
+  renderEnterBattleBtn() {
     if (!this.state.enterBattle) {
-      enterBattleBtn = (
+      return (
         <div>
           <button className="enter-battle-btn btn btn-success" onClick={this.enterBattle}>
             Enter Battle!
@@ -187,25 +190,49 @@ class Fight extends Component {
         </div>
       )
     }
+  }
 
-    let returnBtn = null;
+  /**
+  * @function renderFightIntroText - renders instructions to the user if the battle is not yet won.
+  * @returns {JSX}
+  */
 
+  renderFightIntroText() {
+    if (this.state.winner === null) {
+      return (
+        <p className="fight-intro-text">
+          This human is trying to get glory, or just simply wandered in. Dispatch them quickly to go back to your peaceful afternoon. Warning - they keep getting stronger. If you find yourself losing, you may need to merge some dragons to become stronger!
+        </p>
+      );
+    }
+  };
+
+  /**
+  * @function renderReturnBtn - renders the button that allows a return to the main screen after a battle is finished.
+  * @returns {JSX}
+  */
+
+  renderReturnBtn() {
     if (this.state.winner !== null) {
-      returnBtn = (
+      return (
         <div>
           <button className="return-btn btn btn-primary" onClick={this.props.toggleFightMode}>
             Return to Village
           </button>
         </div>
-      )
+      );
     }
+  };
+
+  render() {
+
+    let returnBtn = null;
 
     return (
       <div>
-        <h2>Battle Screen</h2>
-        <p className="fight-intro-text">This human is trying to get glory, or just simply wandered in. Dispatch them quickly to go back to your peaceful afternoon. Warning - they keep getting stronger. If you find yourself losing, you may need to merge some dragons to become stronger!</p>
+        {this.renderFightIntroText()}
         <h3>{this.state.winner}</h3>
-        {returnBtn}
+        {this.renderReturnBtn()}
         <div className="fight-container">
           <div className="fight-card">
             <DragonCard
@@ -231,7 +258,7 @@ class Fight extends Component {
             />
           </div>
         </div>
-        {enterBattleBtn}
+        {this.renderEnterBattleBtn()}
       </div>
     )
   }
