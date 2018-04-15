@@ -208,6 +208,29 @@ class Fight extends Component {
   };
 
   /**
+  * @function renderHumanCard - renders the human card if the battle has not yet been won.
+  * @returns {JSX}
+  */
+
+  renderHumanCard() {
+    if (this.state.winner === null) {
+      return (
+        <div className="fight-card">
+          <HumanCard
+            style={{backgroundColor: this.state.humanCardBackGround}}
+            imageurl={this.props.human.imageurl}
+            level={this.props.human.level}
+            currenthp={this.props.human.currenthp}
+            maxhp={this.props.human.maxhp}
+            strength={this.props.human.strength}
+            defense={this.props.human.defense}
+          />
+        </div>
+      );
+    }
+  };
+
+  /**
   * @function renderReturnBtn - renders the button that allows a return to the main screen after a battle is finished.
   * @returns {JSX}
   */
@@ -246,17 +269,7 @@ class Fight extends Component {
               defense={this.props.fightingDragon.defense}
             />
           </div>
-          <div className="fight-card">
-            <HumanCard
-              style={{backgroundColor: this.state.humanCardBackGround}}
-              imageurl={this.props.human.imageurl}
-              level={this.props.human.level}
-              currenthp={this.props.human.currenthp}
-              maxhp={this.props.human.maxhp}
-              strength={this.props.human.strength}
-              defense={this.props.human.defense}
-            />
-          </div>
+          {this.renderHumanCard()}
         </div>
         {this.renderEnterBattleBtn()}
       </div>
