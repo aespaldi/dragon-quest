@@ -20,6 +20,7 @@ class MergeContainer extends Component {
   }
 
   componentDidMount() {
+    // TODO: change the route on my api to get all dragons, irrespective of level. then change the action creator function and change it here.
     this.props.getAllDragonsForLevel(2)
   }
 
