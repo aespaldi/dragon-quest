@@ -19,7 +19,7 @@ class MergeContainer extends Component {
     this.saveNewDragon = this.saveNewDragon.bind(this);
   }
 
-  componentDidMount()
+  componentDidMount() {
     this.props.getAllDragons();
   }
 
