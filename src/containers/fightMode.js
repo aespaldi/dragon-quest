@@ -34,6 +34,19 @@ class Fight extends Component {
   }
 
   /**
+  * @function checkForGameWin - checks the level of the human. if the level is at the pre-determined max, the function will return true.
+  * @param {object} human - the object representing the human.
+  * @returns {boolean} - returns true or false based on the level of the human passed in.
+  */
+
+  checkForGameWin(human) {
+    if (human.level >= 20) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
   * @function enterBattle - sets the initial damage values for each player and then calls battleTurn.
   * @returns {undefined} - this is a higher order function that calls other functions.
   */
@@ -89,8 +102,12 @@ class Fight extends Component {
         }
       } else {
         this.displayWinnerMessage(player);
-        const leveledUpHuman = this.levelUpHuman(this.props.human);
-        this.props.saveHuman(leveledUpHuman);
+        if (this.checkForGameWin(this.props.human)) {
+          this.props.declareGameOver(); 
+        } else {
+          const leveledUpHuman = this.levelUpHuman(this.props.human);
+          this.props.saveHuman(leveledUpHuman);
+        }
       }
     };
     // we start with the dragon's turn, because... dragons.
@@ -279,7 +296,9 @@ class Fight extends Component {
 
 Fight.propTypes = {
   callHuman: PropTypes.func,
+  declareGameOver: PropTypes.func,
   fightingDragon: PropTypes.object,
+  gameOver: PropTypes.bool,
   human: PropTypes.object,
   saveHuman: PropTypes.func,
   updateDragonHP: PropTypes.func,

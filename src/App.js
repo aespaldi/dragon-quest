@@ -15,12 +15,14 @@ class App extends Component {
       randomDragonVisible: false,
       dragonCollectionVisible: true,
       fightMode: false,
+      gameOver: false,
       mergeMode: false,
       mergeContainer: false,
     }
 
     this.acceptDragon = this.acceptDragon.bind(this);
     this.callDragon = this.callDragon.bind(this);
+    this.declareGameOver = this.declareGameOver.bind(this);
     this.renderCallDragonBtn = this.renderCallDragonBtn.bind(this);
     this.renderFightView = this.renderFightView.bind(this);
     this.renderMainView = this.renderMainView.bind(this);
@@ -42,6 +44,12 @@ class App extends Component {
       randomDragonVisible: true,
     });
   };
+
+  declareGameOver() {
+    this.setState({
+      gameOver: true,
+    })
+  }
 
   // toggle functions for view.
 
@@ -92,6 +100,8 @@ class App extends Component {
             toggleFightMode={this.toggleFightMode}
             fightMode={this.state.fightMode}
             mergeMode={this.state.mergeMode}
+            gameOver={this.state.gameOver}
+            declareGameOver={this.declareGameOver}
           />
         </div>
       );
@@ -114,6 +124,23 @@ class App extends Component {
     }
   };
 
+  /**
+  * @function renderGameOverMode - displays JSX with a victory message.
+  * @returns {JSX}
+  */
+
+  renderGameOverMode() {
+    if (this.state.gameOver) {
+      return (
+        <div className="game-over-message">
+          <h1>You Won!</h1>
+          <p>The humans have decided that maybe camping next to a village of dragons was a bad idea. Enjoy your peace and quiet!</p>
+          {/* I will also put some cute picture here in the future. */}
+        </div>
+      );
+    }
+  }
+
   renderMergeBtn() {
     if(!this.state.mergeMode) {
       return (
@@ -135,7 +162,7 @@ class App extends Component {
   };
 
   renderMainView() {
-    if (!this.state.randomDragonVisible && !this.state.fightMode && !this.state.mergeContainer) {
+    if (!this.state.randomDragonVisible && !this.state.fightMode && !this.state.mergeContainer && !this.state.gameOver) {
       return (
         <div>
           <div className="dragon-collection-description">
@@ -207,6 +234,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className="main-title">Dragon Quest</h1>
+        {this.renderGameOverMode()}
         {this.renderFightView()}
         {this.renderMergeView()}
         {this.renderRandomDragonContainer()}
@@ -214,9 +242,7 @@ class App extends Component {
       </div>
     );
   };
-
 };
-
 
 const mapStateToProps = ({ fightMode, mergingDragons }) => {
   return { fightMode, mergingDragons };
