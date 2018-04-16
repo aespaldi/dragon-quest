@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon } from '../actions';
+import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragons, removeFromUserDragons, saveDragon } from '../actions';
 import generateRandomNumber from '../helpers';
 import DragonCard from './dragon_card';
 import './merge_container.css';
@@ -19,9 +19,8 @@ class MergeContainer extends Component {
     this.saveNewDragon = this.saveNewDragon.bind(this);
   }
 
-  componentDidMount() {
-    // TODO: change the route on my api to get all dragons, irrespective of level. then change the action creator function and change it here.
-    this.props.getAllDragonsForLevel(2)
+  componentDidMount()
+    this.props.getAllDragons();
   }
 
   componentWillUnmount() {
@@ -204,7 +203,7 @@ MergeContainer.propTypes = {
   addToUserDragons: PropTypes.func,
   clearMergingDragons: PropTypes.func,
   clearNewDragon: PropTypes.func,
-  getAllDragonsForLevel: PropTypes.func,
+  getAllDragons: PropTypes.func,
   removeFromUserDragons: PropTypes.func,
   saveDragon: PropTypes.func,
   toggleMergeMode: PropTypes.func,
@@ -215,4 +214,4 @@ function mapStateToProps({ allDragonsForLevel, dragons, mergingDragons, shinyNew
   return { allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }
 };
 
-export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragonsForLevel, removeFromUserDragons, saveDragon })(MergeContainer);
+export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragons, removeFromUserDragons, saveDragon })(MergeContainer);

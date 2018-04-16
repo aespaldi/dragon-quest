@@ -38,15 +38,14 @@ export function callHuman(id) {
 }
 
 /**
-* get all dragons for a particular level
+* @function getAllDragons - get all dragons from the dragons table in the database.
 *
-* @param {string} level
-* @returns {object} - with a type of action and a payload of a promise that resolves to all rows in the database matching the passed in level.
+* @returns {object} - with a type of action and a payload of a promise that resolves to all rows in the dragons table.
 *
 */
 
-export function getAllDragonsForLevel(level) {
-  const url = `${ROOT_URL}/dragons/level/${level}`;
+export function getAllDragons() {
+  const url = `${ROOT_URL}/dragons`;
   const request = axios.get(url);
   return {
     type: GET_DRAGON_LIST,
