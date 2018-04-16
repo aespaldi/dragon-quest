@@ -92,6 +92,7 @@ class App extends Component {
       );
     };
   };
+  
   renderFightView() {
     if (this.state.fightMode) {
       return (
