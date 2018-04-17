@@ -41,6 +41,17 @@ class MergeContainer extends Component {
     const specialDragon = this.props.allDragonsForLevel[dragonIndex];
     const specialDragonWithId = Object.assign({dragonId: generateRandomNumber()}, specialDragon);
     dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
+    /*
+      REVIEW COMMENT:
+    
+      This line `Math.floor(Math.random() * 3)` and the next aren't
+      too hard to figure out,
+      but I do find I need to squint at them for a second. That's not terrible
+      or anything, but any time I find myself squinting at code, even briefly,
+      I try to think of ways to make that part an instant-read instead. In this case,
+      I think you could write a `chooseRandomFrom(array)` or similar function
+      to replace these two lines and improve readability.
+    */
     const index = Math.floor(Math.random() * 3);
     const chosenDragon = dragonArray[index];
     this.saveNewDragon(chosenDragon);
@@ -53,6 +64,12 @@ class MergeContainer extends Component {
 
   createSuperDragon() {
     // determine which of these is an appropriate color match.
+    /*
+      REVIEW COMMENT:
+    
+      I might make this a `getDragonColors` function or similar,
+      just to tighten things up.
+    */
     const colors = this.props.mergingDragons.map((dragon) => {
       return dragon.type;
     })
@@ -85,6 +102,12 @@ class MergeContainer extends Component {
       imageurl: dragon.imageurl,
       dragonId: generateRandomNumber(),
       level: dragon.level + 1,
+      /*
+        REVIEW COMMENT:
+      
+        The logic for these increases is identical to that for levelling up
+        humans. Can this be dried up?
+      */
       currenthp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
       maxhp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
       strength: Math.round(dragon.strength + (dragon.strength * .15)),
@@ -97,7 +120,12 @@ class MergeContainer extends Component {
   * @function renderMergingDragons - displays JSX that shows the two dragons that the user has chosen to merge, along with buttons that allow the user to either proceed or return to the main menu.
   * @returns {JSX}
   */
-
+  /*
+    REVIEW COMMENT:
+  
+    My preference for these render functions is to make them as stateless
+    funcion components (see notes and link in fightMode.js).
+  */
   renderMergingDragons() {
     if (!this.props.shinyNewDragon.type) {
       return (

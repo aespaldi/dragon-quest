@@ -12,6 +12,14 @@ class App extends Component {
     super(props);
 
     this.state = {
+      /*
+        REVIEW COMMENT:
+      
+        This may be a personal preference thing, so grain of salt,
+        but I tend to prefer names like `randomDragonIsVisible`
+        (note the "is") just to emphasize the boolean nature of 
+        the variable
+      */
       randomDragonVisible: false,
       dragonCollectionVisible: true,
       fightMode: false,
@@ -54,6 +62,11 @@ class App extends Component {
   // toggle functions for view.
 
   toggleFightMode() {
+    /*
+      REVIEW COMMENT:
+    
+      Can this logic be simplified using `!this.state.fightMode`?
+    */
     if (this.state.fightMode) {
       this.setState({
         fightMode: false,
@@ -81,6 +94,12 @@ class App extends Component {
 
   // all of the view functions.
 
+  /*
+    REVIEW COMMENT:
+  
+    I'd do these render functions as stateless function components (see comments
+    and link about this in fightMode.js).
+  */
   renderCallDragonBtn() {
     if (!this.state.mergeMode) {
       return (
