@@ -40,7 +40,6 @@ class MergeContainer extends Component {
     const specialDragon = this.props.allDragons[dragonIndex];
     const specialDragonWithId = Object.assign({dragonId: generateRandomNumber()}, specialDragon);
     dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
-    console.log('dragonArray', dragonArray);
     const index = Math.floor(Math.random() * 3);
     const chosenDragon = dragonArray[index];
     this.saveNewDragon(chosenDragon);
