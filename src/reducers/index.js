@@ -9,7 +9,7 @@ import RandomDragonReducer from './reducer_random_dragon';
 import ShinyNewDragonReducer from './reducer_new_dragon';
 
 const rootReducer = combineReducers({
-  allDragonsForLevel: AllDragonsReducer,
+  allDragons: AllDragonsReducer,
   dragons: DragonsReducer,
   fightMode: EnterFightModeReducer,
   fightingDragon: FightingDragonReducer,

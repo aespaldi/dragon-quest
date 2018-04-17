@@ -55,77 +55,94 @@ class Fight extends Component {
   }
 
   /**
+  * @function battleTurn - applies damage to each player in a single turn. called recursively until one player's hit points drop to or below zero.
+  * @param {number} hp - current hit points of the opposing player.
+  * @param {number} damage - the damage being dealt to the opposite player.
+  * @param {string} player - the type of player - either dragon or human.
+  * @returns {undefined} - the function either calls itself or redux action creators and never returns a value.
+  */
+  
+  
+  battleTurn (hp, damage, player) {
+    let newHP = hp - damage;
+    if (player === 'dragon') {
+      this.updateHumanStats(newHP);
+    } else {
+      this.updateDragonStats(newHP);
+    }
+
+    const damageToHuman = this.setDamageToHuman();
+    const damageToDragon = this.setDamageToDragon();
+    if (newHP > 0) {
+      
+      /*
+          REVIEW COMMENT:
+          This conditional seems to be essentially a duplicate of `if (player === 'dragon') {`
+          above. Can you merge this logic to only need one conditional?
+        */
+
+      
+      if (player === 'human') {
+        this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
+      } else {
+        this.battleTurn(this.props.fightingDragon.currenthp, damageToDragon, 'human');
+      }
+    } else {
+      this.displayWinnerMessage(player);
+      if (this.checkForGameWin(this.props.human)) {
+        this.props.declareGameOver();
+      } else {
+        if (player === 'dragon') {
+          const leveledUpHuman = this.levelUpHuman(this.props.human);
+          this.props.saveHuman(leveledUpHuman);
+        }
+        const dragonRestoredHP = this.props.fightingDragon.maxhp;
+        this.props.fightingDragon.currenthp = dragonRestoredHP;
+        let restoredHumanHP = this.props.human.maxhp;
+        this.updateHumanStats(restoredHumanHP);
+      }
+    }
+  };
+
+  /**
   * @function enterBattle - sets the initial damage values for each player and then calls battleTurn.
   * @returns {undefined} - this is a higher order function that calls other functions.
   */
 
   // the actual fight logic.
   enterBattle() {
+    const damageToHuman = this.setDamageToHuman();
+    const damageToDragon = this.setDamageToDragon();
     this.setState({
       enterBattle: true, /* REVIEW COMMENT: Similar boolean naming feelings here. "battleHasStarted" or similar would be my preference .*/
     })
-    const {
-      strength: dragonStrength,
-      defense: dragonDefense,
-    } = this.props.fightingDragon;
+    // we start with the dragon's turn, because... dragons.
+    this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
+  };
 
-    const {
-      strength: humanStrength,
-      defense: humanDefense,
-    } = this.props.human;
+  /**
+  * @function setDamageToHuman - calculates damage dealt to human from strength and defense in props.
+  * @returns {number}
+  */
 
-    let damageToHuman = dragonStrength - humanDefense;
+  setDamageToHuman() {
+    let damageToHuman = this.props.fightingDragon.strength - this.props.human.defense;
     if (damageToHuman < 0) {
       damageToHuman = 0;
     }
+    return damageToHuman;
+  }
 
-    let damageToDragon = humanStrength - dragonDefense;
+  /**
+  * @function setDamageToDragon - calculates damage dealt to dragon from strength and defense in props.
+  * @returns {number}
+  */
+
+  setDamageToDragon() {
+    let damageToDragon = this.props.human.strength - this.props.fightingDragon.defense;
     if (damageToDragon < 0) {
       damageToDragon = 0;
     }
-
-    /**
-    * @function battleTurn - applies damage to each player in a single turn. called recursively until one player's hit points drop to or below zero.
-    * @param {number} hp - current hit points of the opposing player.
-    * @param {number} damage - the damage being dealt to the opposite player.
-    * @param {string} player - the type of player - either dragon or human.
-    * @returns {undefined} - the function either calls itself or redux action creators and never returns a value.
-    */
-
-    const battleTurn = (hp, damage, player) => {
-      let newHP = hp - damage;
-      if (player === 'dragon') {
-        this.updateHumanStats(newHP);
-      } else {
-        this.updateDragonStats(newHP);
-      }
-
-      if (newHP > 0) {
-        /*
-          REVIEW COMMENT:
-          This conditional seems to be essentially a duplicate of `if (player === 'dragon') {`
-          above. Can you merge this logic to only need one conditional?
-        */
-        if (player === 'human') {
-          this.changeActiveCard(player);
-          battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
-        } else {
-          this.changeActiveCard(player);
-          battleTurn(this.props.fightingDragon.currenthp, damageToDragon, 'human');
-        }
-      } else {
-        this.displayWinnerMessage(player);
-        if (this.checkForGameWin(this.props.human)) {
-          this.props.declareGameOver(); 
-        } else {
-          const leveledUpHuman = this.levelUpHuman(this.props.human);
-          this.props.saveHuman(leveledUpHuman);
-        }
-      }
-    };
-    // we start with the dragon's turn, because... dragons.
-    battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
-  };
 
   // levels up the human character, regardless of battle outcome.
 
@@ -147,8 +164,8 @@ class Fight extends Component {
       */
       currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       maxhp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
-      strength: Math.round(this.props.human.strength + (this.props.human.strength * .15)),
-      defense: Math.round(this.props.human.defense + (this.props.human.strength * .15)),
+      strength: Math.round(this.props.human.strength + (this.props.human.strength * .10)),
+      defense: Math.round(this.props.human.defense + (this.props.human.defense * .10)),
     })
     return newHuman;
   };
