@@ -94,19 +94,25 @@ class Fight extends Component {
 
       if (newHP > 0) {
         if (player === 'human') {
-          this.changeActiveCard(player);
+          // this.changeActiveCard(player);
           battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
         } else {
-          this.changeActiveCard(player);
+          // this.changeActiveCard(player);
           battleTurn(this.props.fightingDragon.currenthp, damageToDragon, 'human');
         }
       } else {
         this.displayWinnerMessage(player);
         if (this.checkForGameWin(this.props.human)) {
-          this.props.declareGameOver(); 
+          this.props.declareGameOver();
         } else {
-          const leveledUpHuman = this.levelUpHuman(this.props.human);
-          this.props.saveHuman(leveledUpHuman);
+          if (player === 'dragon') {
+            const leveledUpHuman = this.levelUpHuman(this.props.human);
+            this.props.saveHuman(leveledUpHuman);
+          }
+          const dragonRestoredHP = this.props.fightingDragon.maxhp;
+          this.props.fightingDragon.currenthp = dragonRestoredHP;
+          let restoredHumanHP = this.props.human.maxhp;
+          this.updateHumanStats(restoredHumanHP);
         }
       }
     };
@@ -127,8 +133,8 @@ class Fight extends Component {
       level: this.props.human.level + 1,
       currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       maxhp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
-      strength: Math.round(this.props.human.strength + (this.props.human.strength * .15)),
-      defense: Math.round(this.props.human.defense + (this.props.human.strength * .15)),
+      strength: Math.round(this.props.human.strength + (this.props.human.strength * .10)),
+      defense: Math.round(this.props.human.defense + (this.props.human.defense * .10)),
     })
     return newHuman;
   };

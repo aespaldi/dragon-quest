@@ -37,9 +37,10 @@ class MergeContainer extends Component {
     const dragonArray = [];
     const firstDragon = this.levelUpDragon(this.props.mergingDragons[0]);
     const secondDragon = this.levelUpDragon(this.props.mergingDragons[1]);
-    const specialDragon = this.props.allDragonsForLevel[dragonIndex];
+    const specialDragon = this.props.allDragons[dragonIndex];
     const specialDragonWithId = Object.assign({dragonId: generateRandomNumber()}, specialDragon);
     dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
+    console.log('dragonArray', dragonArray);
     const index = Math.floor(Math.random() * 3);
     const chosenDragon = dragonArray[index];
     this.saveNewDragon(chosenDragon);
@@ -61,11 +62,11 @@ class MergeContainer extends Component {
       // add the dragon to the shinyNewDragon store so it can be displayed.
       this.saveNewDragon(leveledUpDragon);
       } else if (colors.includes('red') && colors.includes('blue')) {
-        this.createDragonChoiceArray(0);
+        this.createDragonChoiceArray(3);
       } else if (colors.includes('blue') && colors.includes('yellow')) {
-        this.createDragonChoiceArray(1);
+        this.createDragonChoiceArray(4);
       } else if (colors.includes('red') && colors.includes('yellow')) {
-        this.createDragonChoiceArray(2);
+        this.createDragonChoiceArray(5);
       } else {
         throw new Error('invalid color inputs');
       }
@@ -171,12 +172,11 @@ class MergeContainer extends Component {
     const dragonIds = this.props.mergingDragons.map((dragon) => {
       return dragon.dragonId;
     })
-    console.log('dragonIds from mergingDragons', dragonIds);
     this.props.saveDragon(newDragon);
     this.props.dragons.forEach((dragon) => {
       // if the dragonId of the dragons match the dragonId of a mergingDragon, remove it.
       if (dragonIds.includes(dragon.dragonId)) {
-        // finds the index to pass into the action creator.
+        // finds the dragon object to pass into the action creator.
         this.props.removeFromUserDragons(dragon);
       }
     })
@@ -196,7 +196,7 @@ class MergeContainer extends Component {
 };
 
 MergeContainer.propTypes = {
-  allDragonsForLevel: PropTypes.array,
+  allDragons: PropTypes.array,
   dragons: PropTypes.array,
   mergingDragons: PropTypes.array,
   shinyNewDragon: PropTypes.object,
@@ -210,8 +210,8 @@ MergeContainer.propTypes = {
   toggleMergeContainer: PropTypes.func,
 }
 
-function mapStateToProps({ allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }) {
-  return { allDragonsForLevel, dragons, mergingDragons, shinyNewDragon }
+function mapStateToProps({ allDragons, dragons, mergingDragons, shinyNewDragon }) {
+  return { allDragons, dragons, mergingDragons, shinyNewDragon }
 };
 
 export default connect(mapStateToProps, { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragons, removeFromUserDragons, saveDragon })(MergeContainer);
