@@ -39,6 +39,14 @@ class Fight extends Component {
   * @returns {boolean} - returns true or false based on the level of the human passed in.
   */
 
+  /* REVIEW COMMENT: To some degree this is personal preference
+  so take this with a grain of salt
+  (see some discussion here https://stackoverflow.com/questions/1370840/naming-conventions-what-to-name-a-method-that-returns-a-boolean )
+  but generally, I find it helpful to name functions that check a boolean value
+  something like gameIsOver. I find it makes the conditional statements 
+  and other parts of the code a little more readable (e.g. "if gameIsOver"
+  rather than "if checkForGameWin". */
+  
   checkForGameWin(human) {
     if (human.level >= 20) {
       return true;
@@ -53,7 +61,8 @@ class Fight extends Component {
   * @param {string} player - the type of player - either dragon or human.
   * @returns {undefined} - the function either calls itself or redux action creators and never returns a value.
   */
-
+  
+  
   battleTurn (hp, damage, player) {
     let newHP = hp - damage;
     if (player === 'dragon') {
@@ -65,6 +74,14 @@ class Fight extends Component {
     const damageToHuman = this.setDamageToHuman();
     const damageToDragon = this.setDamageToDragon();
     if (newHP > 0) {
+      
+      /*
+          REVIEW COMMENT:
+          This conditional seems to be essentially a duplicate of `if (player === 'dragon') {`
+          above. Can you merge this logic to only need one conditional?
+        */
+
+      
       if (player === 'human') {
         this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
       } else {
@@ -97,7 +114,7 @@ class Fight extends Component {
     const damageToHuman = this.setDamageToHuman();
     const damageToDragon = this.setDamageToDragon();
     this.setState({
-      enterBattle: true,
+      enterBattle: true, /* REVIEW COMMENT: Similar boolean naming feelings here. "battleHasStarted" or similar would be my preference .*/
     })
     // we start with the dragon's turn, because... dragons.
     this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
@@ -126,8 +143,6 @@ class Fight extends Component {
     if (damageToDragon < 0) {
       damageToDragon = 0;
     }
-    return damageToDragon;
-  }
 
   // levels up the human character, regardless of battle outcome.
 
@@ -140,6 +155,13 @@ class Fight extends Component {
   levelUpHuman() {
     const newHuman = Object.assign(this.props.human, {
       level: this.props.human.level + 1,
+      /*
+        REVIEW COMMENT:
+      
+        This value increasing functionality seems like it could be dried up
+        with a small helper function. Smoething you could call like
+        `nextLevelStatValue(currentStatValue, multiplier)`
+      */
       currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       maxhp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
       strength: Math.round(this.props.human.strength + (this.props.human.strength * .10)),
@@ -165,6 +187,15 @@ class Fight extends Component {
 
   updateHumanStats(hp) {
     const humanAfterDamage = Object.assign(this.props.human, {currenthp: hp});
+    /*
+      REVIEW COMMENT:
+    
+      This updateHumanHP function doesn't really update the HP,
+      it updates the whole human object. I'd either rename it to updateHuman
+      or change it so that it necessarily only takes HP and only updates HP.
+
+      Same with the dragon HP function above.
+    */
     this.props.updateHumanHP(humanAfterDamage);
   };
 
@@ -211,7 +242,18 @@ class Fight extends Component {
   * @function renderEnterBattleBtn - renders the button that the user clicks to enter the battle.
   * @returns {JSX}
   */
+  /*
+    REVIEW COMMENT:
+  
+    This could be a stateless functional component. I tend to prefer that
+    over what you're doing here in most cases. Partly, I think it makes
+    the main render function easier to read, and partly, making them
+    stateless components makes it clear that they aren't doing any complex
+    logic whatsoever, which I think makes the code overall easier to reason
+    about.
 
+    Related resource: https://hackernoon.com/react-stateless-functional-components-nine-wins-you-might-have-overlooked-997b0d933dbc
+  */
   renderEnterBattleBtn() {
     if (!this.state.enterBattle) {
       return (
@@ -228,7 +270,11 @@ class Fight extends Component {
   * @function renderFightIntroText - renders instructions to the user if the battle is not yet won.
   * @returns {JSX}
   */
-
+  /*
+    REVIEW COMMENT:
+  
+    This could be a stateless functional component.
+  */
   renderFightIntroText() {
     if (this.state.winner === null) {
       return (
@@ -244,6 +290,11 @@ class Fight extends Component {
   * @returns {JSX}
   */
 
+  /*
+    REVIEW COMMENT:
+  
+    This could be a stateless functional component.
+  */
   renderHumanCard() {
     if (this.state.winner === null) {
       return (
@@ -267,6 +318,11 @@ class Fight extends Component {
   * @returns {JSX}
   */
 
+  /*
+    REVIEW COMMENT:
+  
+    This could be a stateless functional component.
+  */
   renderReturnBtn() {
     if (this.state.winner !== null) {
       return (
