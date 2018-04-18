@@ -6,7 +6,7 @@ import React from 'react';
 */
 
 export default function ReturnBtn(props) {
-  if (this.state.winner !== null) {
+  if (props.winner !== null) {
     return (
       <div>
         <button className="return-btn btn btn-primary" onClick={props.toggleFightMode}>
@@ -14,5 +14,6 @@ export default function ReturnBtn(props) {
         </button>
       </div>
     );
-    return null;
+  }
+  return null;
 };
