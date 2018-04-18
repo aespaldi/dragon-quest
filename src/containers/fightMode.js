@@ -225,39 +225,6 @@ class Fight extends Component {
   }
 
   /**
-  * @function renderEnterBattleBtn - renders the button that the user clicks to enter the battle.
-  * @returns {JSX}
-  */
-
-  /**
-  * @function renderHumanCard - renders the human card if the battle has not yet been won.
-  * @returns {JSX}
-  */
-
-  /*
-    REVIEW COMMENT:
-
-    This could be a stateless functional component.
-  */
-  renderHumanCard() {
-    if (this.state.winner === null) {
-      return (
-        <div className="fight-card">
-          <HumanCard
-            style={{backgroundColor: this.state.humanCardBackGround}}
-            imageurl={this.props.human.imageurl}
-            level={this.props.human.level}
-            currenthp={this.props.human.currenthp}
-            maxhp={this.props.human.maxhp}
-            strength={this.props.human.strength}
-            defense={this.props.human.defense}
-          />
-        </div>
-      );
-    }
-  };
-
-  /**
   * @function renderReturnBtn - renders the button that allows a return to the main screen after a battle is finished.
   * @returns {JSX}
   */
@@ -296,7 +263,16 @@ class Fight extends Component {
               defense={this.props.fightingDragon.defense}
             />
           </div>
-          {this.renderHumanCard()}
+          <HumanCard
+            winner={this.state.winner}
+            style={{backgroundColor: this.state.humanCardBackGround}}
+            imageurl={this.props.human.imageurl}
+            level={this.props.human.level}
+            currenthp={this.props.human.currenthp}
+            maxhp={this.props.human.maxhp}
+            strength={this.props.human.strength}
+            defense={this.props.human.defense}
+          />
         </div>
         <EnterBattleBtn
           battleHasStarted={this.state.battleHasStarted}
