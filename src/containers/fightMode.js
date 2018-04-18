@@ -108,7 +108,6 @@ class Fight extends Component {
   * @returns {undefined} - this is a higher order function that calls other functions.
   */
 
-  // the actual fight logic.
   enterBattle() {
     const damageToHuman = this.setDamageToHuman();
     const damageToDragon = this.setDamageToDragon();
@@ -127,7 +126,7 @@ class Fight extends Component {
   setDamageToHuman() {
     let damageToHuman = this.props.fightingDragon.strength - this.props.human.defense;
     if (damageToHuman < 0) {
-      damageToHuman = 0;
+      damageToHuman = 2;
     }
     return damageToHuman;
   }
@@ -140,7 +139,7 @@ class Fight extends Component {
   setDamageToDragon() {
     let damageToDragon = this.props.human.strength - this.props.fightingDragon.defense;
     if (damageToDragon < 0) {
-      damageToDragon = 0;
+      damageToDragon = 1;
     }
     return damageToDragon;
   }
@@ -233,6 +232,7 @@ class Fight extends Component {
         />
         <h3>{this.state.winner}</h3>
         <ReturnBtn
+          winner={this.state.winner}
           toggleFightMode={this.props.toggleFightMode}
         />
         <div className="fight-container">
