@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragons, removeFromUserDragons, saveDragon } from '../actions';
-import { generateRandomNumber } from '../helpers';
-import DragonCard from './dragon_card';
+import { chooseRandomFrom, generateRandomNumber, nextLevelStatValue } from '../helpers';
+import MergingDragons from './mergingDragons';
+import NewDragon from './newdragon';
 import './merge_container.css';
 
 class MergeContainer extends Component {
@@ -13,8 +14,6 @@ class MergeContainer extends Component {
     this.createDragonChoiceArray = this.createDragonChoiceArray.bind(this);
     this.createSuperDragon = this.createSuperDragon.bind(this);
     this.levelUpDragon = this.levelUpDragon.bind(this);
-    this.renderMergingDragons = this.renderMergingDragons.bind(this);
-    this.renderNewDragon = this.renderNewDragon.bind(this);
     this.returnToVillage = this.returnToVillage.bind(this);
     this.saveNewDragon = this.saveNewDragon.bind(this);
   }
@@ -40,20 +39,20 @@ class MergeContainer extends Component {
     const specialDragon = this.props.allDragons[dragonIndex];
     const specialDragonWithId = Object.assign({dragonId: generateRandomNumber()}, specialDragon);
     dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
-    /*
-      REVIEW COMMENT:
-
-      This line `Math.floor(Math.random() * 3)` and the next aren't
-      too hard to figure out,
-      but I do find I need to squint at them for a second. That's not terrible
-      or anything, but any time I find myself squinting at code, even briefly,
-      I try to think of ways to make that part an instant-read instead. In this case,
-      I think you could write a `chooseRandomFrom(array)` or similar function
-      to replace these two lines and improve readability.
-    */
-    const index = Math.floor(Math.random() * 3);
-    const chosenDragon = dragonArray[index];
+    const chosenDragon = chooseRandomFrom(dragonArray, dragonArray.length);
     this.saveNewDragon(chosenDragon);
+  }
+
+  /**
+  * @function getDragonColors - pulls the colors off of the mergingDragons from the redux store.
+  * @returns {array} - returns an array of dragon colors.
+  */
+
+  getDragonColors() {
+    const colors = this.props.mergingDragons.map((dragon) => {
+      return dragon.type;
+    })
+    return colors;
   }
 
   /**
@@ -63,15 +62,8 @@ class MergeContainer extends Component {
 
   createSuperDragon() {
     // determine which of these is an appropriate color match.
-    /*
-      REVIEW COMMENT:
 
-      I might make this a `getDragonColors` function or similar,
-      just to tighten things up.
-    */
-    const colors = this.props.mergingDragons.map((dragon) => {
-      return dragon.type;
-    })
+    const colors = this.getDragonColors()
     // if the colors are the same, just level up the first dragon.
     if (colors[0] === colors[1]) {
       const leveledUpDragon = this.levelUpDragon(this.props.mergingDragons[0]);
@@ -101,83 +93,13 @@ class MergeContainer extends Component {
       imageurl: dragon.imageurl,
       dragonId: generateRandomNumber(),
       level: dragon.level + 1,
-      /*
-        REVIEW COMMENT:
-
-        The logic for these increases is identical to that for levelling up
-        humans. Can this be dried up?
-      */
-      currenthp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
-      maxhp: Math.round(dragon.maxhp + (dragon.maxhp * .10)),
-      strength: Math.round(dragon.strength + (dragon.strength * .15)),
-      defense: Math.round(dragon.defense + (dragon.defense * .15)),
+      currenthp: nextLevelStatValue(dragon.maxhp, .10),
+      maxhp: nextLevelStatValue(dragon.maxhp, .10),
+      strength: nextLevelStatValue(dragon.strength, .15),
+      defense: nextLevelStatValue(dragon.defense, .15),
     }
     return newDragon;
   }
-
-  /**
-  * @function renderMergingDragons - displays JSX that shows the two dragons that the user has chosen to merge, along with buttons that allow the user to either proceed or return to the main menu.
-  * @returns {JSX}
-  */
-  /*
-    REVIEW COMMENT:
-
-    My preference for these render functions is to make them as stateless
-    funcion components (see notes and link in fightMode.js).
-  */
-  renderMergingDragons() {
-    if (!this.props.shinyNewDragon.type) {
-      return (
-        <div className="merge-container">
-          <p>Merging dragons is an irreversible and slightly unpredictable action. The two dragons you have selected will disappear forever and be replaced with one new dragon whose level will be guaranteed to be at least one level higher than your LOWEST LEVEL dragon. You may simply get a stronger version of what you already have, or if you're lucky, you may get a special dragon with the combined powers of the previous two!</p>
-          <button className="btn btn-success" onClick={this.createSuperDragon}>Let's Do This!</button>
-          <button className="btn btn-danger">Changed My Mind!</button>
-          <div className="dragons-to-merge">
-            {this.props.mergingDragons.map(dragon =>
-              <DragonCard
-                key={dragon.dragonId}
-                imageurl={dragon.imageurl}
-                type={dragon.type}
-                level={dragon.level}
-                currenthp={dragon.currenthp}
-                maxhp={dragon.maxhp}
-                strength={dragon.strength}
-                defense={dragon.defense}
-              />
-            )}
-          </div>
-        </div>
-      );
-    }
-  }
-
-  /**
-  * @function renderNewDragon - displays JSX that shows new dragon that the user has received as a result of the merge, along with the button that allows the user to return to the main menu.
-  * @returns {JSX}
-  */
-
-  renderNewDragon() {
-    if (this.props.shinyNewDragon.type) {
-      return (
-        <div className="new-dragon-container">
-          <h4>A New Dragon Emerges!</h4>
-          <DragonCard
-            imageurl={this.props.shinyNewDragon.imageurl}
-            type={this.props.shinyNewDragon.type}
-            level={this.props.shinyNewDragon.level}
-            currenthp={this.props.shinyNewDragon.currenthp}
-            maxhp={this.props.shinyNewDragon.maxhp}
-            strength={this.props.shinyNewDragon.strength}
-            defense={this.props.shinyNewDragon.defense}
-          />
-          <button
-            className="merge-success-return-btn btn btn-success"
-            onClick={this.returnToVillage}
-            >Return to Village</button>
-        </div>
-      );
-    };
-  };
 
   /**
   * @function returnToVillage - returns the user to the main screen.
@@ -215,8 +137,15 @@ class MergeContainer extends Component {
     return (
       <div>
         <h3 className="merge-mode-title">Merge Mode</h3>
-        {this.renderMergingDragons()}
-        {this.renderNewDragon()}
+        <MergingDragons
+          createSuperDragon={this.createSuperDragon}
+          mergingDragons={this.props.mergingDragons}
+          shinyNewDragon={this.props.shinyNewDragon}
+        />
+        <NewDragon
+          returnToVillage={this.returnToVillage}
+          shinyNewDragon={this.props.shinyNewDragon}
+        />
       </div>
     );
   };
