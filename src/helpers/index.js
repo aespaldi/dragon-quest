@@ -8,4 +8,8 @@ function generateRandomNumber() {
   return `${randomNum}_${new Date().getTime()}`;
 }
 
-module.exports = generateRandomNumber;
+function nextLevelStatValue(currentStatValue, multiplier) {
+  return Math.round(currentStatValue + (currentStatValue * multiplier))
+}
+
+module.exports = { generateRandomNumber, nextLevelStatValue };

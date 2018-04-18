@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, clearMergingDragons, clearNewDragon, getAllDragons, removeFromUserDragons, saveDragon } from '../actions';
-import generateRandomNumber from '../helpers';
+import { generateRandomNumber } from '../helpers';
 import DragonCard from './dragon_card';
 import './merge_container.css';
 
@@ -42,7 +42,7 @@ class MergeContainer extends Component {
     dragonArray.push(firstDragon, secondDragon, specialDragonWithId);
     /*
       REVIEW COMMENT:
-    
+
       This line `Math.floor(Math.random() * 3)` and the next aren't
       too hard to figure out,
       but I do find I need to squint at them for a second. That's not terrible
@@ -65,7 +65,7 @@ class MergeContainer extends Component {
     // determine which of these is an appropriate color match.
     /*
       REVIEW COMMENT:
-    
+
       I might make this a `getDragonColors` function or similar,
       just to tighten things up.
     */
@@ -103,7 +103,7 @@ class MergeContainer extends Component {
       level: dragon.level + 1,
       /*
         REVIEW COMMENT:
-      
+
         The logic for these increases is identical to that for levelling up
         humans. Can this be dried up?
       */
@@ -121,7 +121,7 @@ class MergeContainer extends Component {
   */
   /*
     REVIEW COMMENT:
-  
+
     My preference for these render functions is to make them as stateless
     funcion components (see notes and link in fightMode.js).
   */

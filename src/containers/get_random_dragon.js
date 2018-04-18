@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addToUserDragons, getRandomDragon } from '../actions';
-import generateRandomNumber from '../helpers';
+import { generateRandomNumber } from '../helpers';
 import DragonCard from '../containers/dragon_card.js';
 import './get_random_dragon.css';
 
