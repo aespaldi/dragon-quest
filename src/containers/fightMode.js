@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { callHuman, saveHuman, updateHumanHP, updateDragonHP } from '../actions'
+import { callHuman, saveHuman, updateHuman, updateDragon } from '../actions'
+import { nextLevelStatValue } from '../helpers';
 import DragonCard from './dragon_card';
+import EnterBattleBtn from '../components/enterBattleBtn';
+import FightIntroText from '../components/fightIntroText';
 import HumanCard from '../components/human_card';
+import ReturnBtn from '../components/returnBtn';
 import './fightMode.css';
 
 class Fight extends Component {
@@ -11,8 +15,7 @@ class Fight extends Component {
     super(props);
 
     this.state = {
-      battleEntered: false,
-      battleMode: true,
+      battleHasStarted: false,
       dragonCardBackGround: 'black',
       humanCardBackGround: 'black',
       winner: null,
@@ -22,7 +25,6 @@ class Fight extends Component {
     this.displayWinnerMessage = this.displayWinnerMessage.bind(this);
     this.enterBattle = this.enterBattle.bind(this);
     this.levelUpHuman = this.levelUpHuman.bind(this);
-    this.renderFightIntroText = this.renderFightIntroText.bind(this);
     this.updateDragonStats = this.updateDragonStats.bind(this);
     this.updateHumanStats = this.updateHumanStats.bind(this);
   }
@@ -34,20 +36,12 @@ class Fight extends Component {
   }
 
   /**
-  * @function checkForGameWin - checks the level of the human. if the level is at the pre-determined max, the function will return true.
+  * @function gameIsOver - checks the level of the human. if the level is at the pre-determined max, the function will return true.
   * @param {object} human - the object representing the human.
   * @returns {boolean} - returns true or false based on the level of the human passed in.
   */
 
-  /* REVIEW COMMENT: To some degree this is personal preference
-  so take this with a grain of salt
-  (see some discussion here https://stackoverflow.com/questions/1370840/naming-conventions-what-to-name-a-method-that-returns-a-boolean )
-  but generally, I find it helpful to name functions that check a boolean value
-  something like gameIsOver. I find it makes the conditional statements 
-  and other parts of the code a little more readable (e.g. "if gameIsOver"
-  rather than "if checkForGameWin". */
-  
-  checkForGameWin(human) {
+  gameIsOver(human) {
     if (human.level >= 20) {
       return true;
     }
@@ -61,46 +55,51 @@ class Fight extends Component {
   * @param {string} player - the type of player - either dragon or human.
   * @returns {undefined} - the function either calls itself or redux action creators and never returns a value.
   */
-  
-  
-  battleTurn (hp, damage, player) {
-    let newHP = hp - damage;
-    if (player === 'dragon') {
-      this.updateHumanStats(newHP);
-    } else {
-      this.updateDragonStats(newHP);
-    }
 
+  battleTurn (hp, damage, player) {
     const damageToHuman = this.setDamageToHuman();
     const damageToDragon = this.setDamageToDragon();
-    if (newHP > 0) {
-      
-      /*
-          REVIEW COMMENT:
-          This conditional seems to be essentially a duplicate of `if (player === 'dragon') {`
-          above. Can you merge this logic to only need one conditional?
-        */
-
-      
-      if (player === 'human') {
-        this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
-      } else {
+    let newHP = hp - damage;
+    // if the player is the dragon, take the hit points off the human.
+    if (player === 'dragon') {
+      this.updateHumanStats(newHP);
+      // if the new hp of the human is greater than zero, change the turn to the human's.
+      if (newHP > 0) {
         this.battleTurn(this.props.fightingDragon.currenthp, damageToDragon, 'human');
+        // if the hp of the human is zero or less, call battle is won with the dragon.
+      } else {
+        this.battleIsWon('dragon');
       }
     } else {
-      this.displayWinnerMessage(player);
-      if (this.checkForGameWin(this.props.human)) {
-        this.props.declareGameOver();
+      // if the player is the human, update the dragon's hp.
+      this.updateDragonStats(newHP);
+      if (newHP > 0) {
+        this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
       } else {
-        if (player === 'dragon') {
-          const leveledUpHuman = this.levelUpHuman(this.props.human);
-          this.props.saveHuman(leveledUpHuman);
-        }
-        const dragonRestoredHP = this.props.fightingDragon.maxhp;
-        this.props.fightingDragon.currenthp = dragonRestoredHP;
-        let restoredHumanHP = this.props.human.maxhp;
-        this.updateHumanStats(restoredHumanHP);
+        this.battleIsWon('human');
       }
+    }
+  };
+
+  /**
+  * @function battleIsWon
+  * @param {string} player - the player type, dragon or human.
+  * @returns {undefined}
+  */
+
+  battleIsWon(player) {
+    this.displayWinnerMessage(player);
+    if (this.gameIsOver(this.props.human)) {
+      this.props.declareGameOver();
+    } else {
+      if (player === 'dragon') {
+        const leveledUpHuman = this.levelUpHuman(this.props.human);
+        this.props.saveHuman(leveledUpHuman);
+      }
+      const dragonRestoredHP = this.props.fightingDragon.maxhp;
+      this.props.fightingDragon.currenthp = dragonRestoredHP;
+      let restoredHumanHP = this.props.human.maxhp;
+      this.updateHumanStats(restoredHumanHP);
     }
   };
 
@@ -114,7 +113,7 @@ class Fight extends Component {
     const damageToHuman = this.setDamageToHuman();
     const damageToDragon = this.setDamageToDragon();
     this.setState({
-      enterBattle: true, /* REVIEW COMMENT: Similar boolean naming feelings here. "battleHasStarted" or similar would be my preference .*/
+      battleHasStarted: true,
     })
     // we start with the dragon's turn, because... dragons.
     this.battleTurn(this.props.human.currenthp, damageToHuman, 'dragon');
@@ -143,6 +142,8 @@ class Fight extends Component {
     if (damageToDragon < 0) {
       damageToDragon = 0;
     }
+    return damageToDragon;
+  }
 
   // levels up the human character, regardless of battle outcome.
 
@@ -155,20 +156,14 @@ class Fight extends Component {
   levelUpHuman() {
     const newHuman = Object.assign(this.props.human, {
       level: this.props.human.level + 1,
-      /*
-        REVIEW COMMENT:
-      
-        This value increasing functionality seems like it could be dried up
-        with a small helper function. Smoething you could call like
-        `nextLevelStatValue(currentStatValue, multiplier)`
-      */
-      currenthp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
-      maxhp: Math.round(this.props.human.maxhp + (this.props.human.maxhp * .10)),
-      strength: Math.round(this.props.human.strength + (this.props.human.strength * .10)),
-      defense: Math.round(this.props.human.defense + (this.props.human.defense * .10)),
+      currenthp: nextLevelStatValue(this.props.human.maxhp, .10),
+      maxhp: nextLevelStatValue(this.props.human.maxhp, .10),
+      strength: nextLevelStatValue(this.props.human.strength, .10),
+      defense: nextLevelStatValue(this.props.human.defense, .10),
     })
     return newHuman;
   };
+
 
   /**
   * @function updateDragonStats - creates a new dragon object with updated hp and passes it to a redux action creator that updates those stats in the store.
@@ -177,7 +172,7 @@ class Fight extends Component {
 
   updateDragonStats(hp) {
     const dragonAfterDamage = Object.assign(this.props.fightingDragon, {currenthp: hp});
-    this.props.updateDragonHP(dragonAfterDamage);
+    this.props.updateDragon(dragonAfterDamage);
   };
 
   /**
@@ -187,16 +182,7 @@ class Fight extends Component {
 
   updateHumanStats(hp) {
     const humanAfterDamage = Object.assign(this.props.human, {currenthp: hp});
-    /*
-      REVIEW COMMENT:
-    
-      This updateHumanHP function doesn't really update the HP,
-      it updates the whole human object. I'd either rename it to updateHuman
-      or change it so that it necessarily only takes HP and only updates HP.
-
-      Same with the dragon HP function above.
-    */
-    this.props.updateHumanHP(humanAfterDamage);
+    this.props.updateHuman(humanAfterDamage);
   };
 
   // View functions:
@@ -242,48 +228,6 @@ class Fight extends Component {
   * @function renderEnterBattleBtn - renders the button that the user clicks to enter the battle.
   * @returns {JSX}
   */
-  /*
-    REVIEW COMMENT:
-  
-    This could be a stateless functional component. I tend to prefer that
-    over what you're doing here in most cases. Partly, I think it makes
-    the main render function easier to read, and partly, making them
-    stateless components makes it clear that they aren't doing any complex
-    logic whatsoever, which I think makes the code overall easier to reason
-    about.
-
-    Related resource: https://hackernoon.com/react-stateless-functional-components-nine-wins-you-might-have-overlooked-997b0d933dbc
-  */
-  renderEnterBattleBtn() {
-    if (!this.state.enterBattle) {
-      return (
-        <div>
-          <button className="enter-battle-btn btn btn-success" onClick={this.enterBattle}>
-            Enter Battle!
-          </button>
-        </div>
-      )
-    }
-  }
-
-  /**
-  * @function renderFightIntroText - renders instructions to the user if the battle is not yet won.
-  * @returns {JSX}
-  */
-  /*
-    REVIEW COMMENT:
-  
-    This could be a stateless functional component.
-  */
-  renderFightIntroText() {
-    if (this.state.winner === null) {
-      return (
-        <p className="fight-intro-text">
-          This human is trying to get glory, or just simply wandered in. Dispatch them quickly to go back to your peaceful afternoon. Warning - they keep getting stronger. If you find yourself losing, you may need to merge some dragons to become stronger!
-        </p>
-      );
-    }
-  };
 
   /**
   * @function renderHumanCard - renders the human card if the battle has not yet been won.
@@ -292,7 +236,7 @@ class Fight extends Component {
 
   /*
     REVIEW COMMENT:
-  
+
     This could be a stateless functional component.
   */
   renderHumanCard() {
@@ -318,19 +262,12 @@ class Fight extends Component {
   * @returns {JSX}
   */
 
-  /*
-    REVIEW COMMENT:
-  
-    This could be a stateless functional component.
-  */
   renderReturnBtn() {
     if (this.state.winner !== null) {
       return (
-        <div>
-          <button className="return-btn btn btn-primary" onClick={this.props.toggleFightMode}>
-            Return to Village
-          </button>
-        </div>
+        <ReturnBtn
+          toggleFightMode={this.props.toggleFightMode}
+        />
       );
     }
   };
@@ -341,7 +278,9 @@ class Fight extends Component {
 
     return (
       <div>
-        {this.renderFightIntroText()}
+        <FightIntroText
+          winner={this.state.winner}
+        />
         <h3>{this.state.winner}</h3>
         {this.renderReturnBtn()}
         <div className="fight-container">
@@ -359,7 +298,10 @@ class Fight extends Component {
           </div>
           {this.renderHumanCard()}
         </div>
-        {this.renderEnterBattleBtn()}
+        <EnterBattleBtn
+          battleHasStarted={this.state.battleHasStarted}
+          enterBattle={this.enterBattle}
+        />
       </div>
     )
   }
@@ -372,12 +314,12 @@ Fight.propTypes = {
   gameOver: PropTypes.bool,
   human: PropTypes.object,
   saveHuman: PropTypes.func,
-  updateDragonHP: PropTypes.func,
-  updateHumanHP: PropTypes.func,
+  updateDragon: PropTypes.func,
+  updateHuman: PropTypes.func,
 }
 
 function mapStateToProps({ fightingDragon, human}) {
   return { fightingDragon, human };
 };
 
-export default connect(mapStateToProps, { callHuman, saveHuman, updateDragonHP, updateHumanHP})(Fight);
+export default connect(mapStateToProps, { callHuman, saveHuman, updateDragon, updateHuman})(Fight);
