@@ -175,6 +175,7 @@ class Fight extends Component {
     this.props.updateDragon(dragonAfterDamage);
   };
 
+
   /**
   * @function updateHumanStats - creates a new human object with updated hp and passes it to a redux action creator that updates those stats in the store.
   * @returns {undefined} - function calls another function and returns nothing.
@@ -224,32 +225,16 @@ class Fight extends Component {
     }
   }
 
-  /**
-  * @function renderReturnBtn - renders the button that allows a return to the main screen after a battle is finished.
-  * @returns {JSX}
-  */
-
-  renderReturnBtn() {
-    if (this.state.winner !== null) {
-      return (
-        <ReturnBtn
-          toggleFightMode={this.props.toggleFightMode}
-        />
-      );
-    }
-  };
-
   render() {
-
-    let returnBtn = null;
-
     return (
       <div>
         <FightIntroText
           winner={this.state.winner}
         />
         <h3>{this.state.winner}</h3>
-        {this.renderReturnBtn()}
+        <ReturnBtn
+          toggleFightMode={this.props.toggleFightMode}
+        />
         <div className="fight-container">
           <div className="fight-card">
             <DragonCard
