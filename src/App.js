@@ -78,7 +78,7 @@ class App extends Component {
 
   // all of the view functions.
 
-  
+
   renderMergeView() {
     if (this.state.mergeContainer) {
       return (
@@ -137,8 +137,10 @@ class App extends Component {
           randomDragonIsVisible={this.state.randomDragonIsVisible}
           fightMode={this.state.fightMode}
           mergeContainer={this.state.mergeContainer}
+          mergeMode={this.state.mergeMode}
           gameOver={this.state.gameOver}
           toggleMergeMode={this.toggleMergeMode}
+          toggleFightMode={this.toggleFightMode}
         />
       </div>
     );

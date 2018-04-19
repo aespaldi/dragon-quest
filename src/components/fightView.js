@@ -1,5 +1,5 @@
 import React from 'react';
-import Fight from '../containers/fightMode';
+import Fight from '../containers/fight';
 
 export default function FightView(props) {
   if (props.fightMode) {

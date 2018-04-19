@@ -246,6 +246,7 @@ class Fight extends Component {
               maxhp={this.props.fightingDragon.maxhp}
               strength={this.props.fightingDragon.strength}
               defense={this.props.fightingDragon.defense}
+              toggleFightMode={this.props.toggleFightMode}
             />
           </div>
           <HumanCard

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function MergeBtn(props) {
-  if (props.mergeMode) {
+  if (!props.mergeMode) {
     return (
       <span>
         <button id="dragon-merge-btn" className="btn btn-info" onClick={props.toggleMergeMode}>
