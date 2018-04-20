@@ -78,7 +78,6 @@ class App extends Component {
 
   // all of the view functions.
 
-
   renderMergeView() {
     if (this.state.mergeContainer) {
       return (
@@ -90,6 +89,7 @@ class App extends Component {
         </div>
       );
     }
+    return null;
   };
 
   renderRandomDragonContainer() {
