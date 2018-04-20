@@ -65,7 +65,6 @@ class App extends Component {
   };
 
   toggleMergeContainer() {
-    console.log('this.state.mergeContainerIsVisible', this.state.mergeContainerIsVisible)
     if (this.state.mergeContainerIsVisible) {
       this.setState({
         mergeContainerIsVisible: false,

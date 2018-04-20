@@ -75,6 +75,12 @@ class MergeContainer extends Component {
         this.createDragonChoiceArray(4);
       } else if (colors.includes('red') && colors.includes('yellow')) {
         this.createDragonChoiceArray(5);
+      } else if (colors.includes('purple')) {
+        this.createDragonChoiceArray(6);
+      } else if (colors.includes('orange')) {
+        this.createDragonChoiceArray(7);
+      } else if (colors.includes('green')) {
+        this.createDragonChoiceArray(8);
       } else {
         throw new Error('invalid color inputs');
       }
