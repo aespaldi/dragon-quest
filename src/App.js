@@ -18,7 +18,7 @@ class App extends Component {
       fightMode: false,
       gameOver: false,
       mergeMode: false,
-      mergeContainer: false,
+      mergeContainerIsVisible: false,
     }
 
     this.acceptDragon = this.acceptDragon.bind(this);
@@ -29,6 +29,8 @@ class App extends Component {
     this.toggleFightMode = this.toggleFightMode.bind(this);
     this.toggleMergeMode = this.toggleMergeMode.bind(this);
   }
+
+
 
   acceptDragon() {
     this.setState({
@@ -62,6 +64,19 @@ class App extends Component {
     }
   };
 
+  toggleMergeContainer() {
+    console.log('this.state.mergeContainerIsVisible', this.state.mergeContainerIsVisible)
+    if (this.state.mergeContainerIsVisible) {
+      this.setState({
+        mergeContainerIsVisible: false,
+      });
+    } else {
+      this.setState({
+        mergeContainerIsVisible: true,
+      });
+    }
+  };
+
   toggleMergeMode() {
     if (this.state.mergeMode) {
       const data = [];
@@ -79,7 +94,7 @@ class App extends Component {
   // all of the view functions.
 
   renderMergeView() {
-    if (this.state.mergeContainer) {
+    if (this.state.mergeContainerIsVisible) {
       return (
         <div>
           <MergeContainer
@@ -104,17 +119,7 @@ class App extends Component {
     }
   };
 
-  toggleMergeContainer() {
-    if (this.state.mergeContainer) {
-      this.setState({
-        mergeContainer: false,
-      });
-    } else {
-      this.setState({
-        mergeContainer: true,
-      });
-    }
-  };
+
 
   render() {
     return (
@@ -136,9 +141,11 @@ class App extends Component {
           callDragon={this.callDragon}
           randomDragonIsVisible={this.state.randomDragonIsVisible}
           fightMode={this.state.fightMode}
-          mergeContainer={this.state.mergeContainer}
+          mergeContainerIsVisible={this.state.mergeContainerIsVisible}
+          mergingDragons={this.props.mergingDragons}
           mergeMode={this.state.mergeMode}
           gameOver={this.state.gameOver}
+          toggleMergeContainer={this.toggleMergeContainer}
           toggleMergeMode={this.toggleMergeMode}
           toggleFightMode={this.toggleFightMode}
         />

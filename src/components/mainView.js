@@ -5,7 +5,7 @@ import MergeBtn from './mergeBtn';
 import PrepareToMergeBtn from './prepareToMergeBtn';
 
 export default function MainView(props) {
-  if (!props.randomDragonIsVisible && !props.fightMode && !props.mergeContainer && !props.gameOver) {
+  if (!props.randomDragonIsVisible && !props.fightMode && !props.mergeContainerIsVisible && !props.gameOver) {
     return (
       <div>
         <div className="dragon-collection-description">
