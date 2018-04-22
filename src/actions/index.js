@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const ADD_DRAGON = 'ADD_DRAGON';
+export const CLEAR_FIGHTING_DRAGON = 'CLEAR_FIGHTING_DRAGON';
 export const CLEAR_MERGING_DRAGONS = 'CLEAR_MERGING_DRAGONS';
+export const CLEAR_RANDOM_DRAGON = 'CLEAR_RANDOM_DRAGON';
 export const CLEAR_NEW_DRAGON = 'CLEAR_NEW_DRAGON';
 export const ENTER_FIGHT = 'ENTER_FIGHT';
 export const FIGHTING_DRAGON = 'FIGHTING_DRAGON';
@@ -54,6 +56,19 @@ export function getAllDragons() {
 }
 
 /**
+* replaces the randomDragon in the store with an empty object.
+*
+* @returns {object} - with the type of action
+*
+*/
+
+export function clearRandomDragon() {
+  return {
+    type: CLEAR_RANDOM_DRAGON,
+  }
+}
+
+/**
 * get a random dragon by level.
 *
 * @param {string} level
@@ -84,6 +99,19 @@ export function addToUserDragons(dragon) {
   return {
     type: ADD_DRAGON,
     payload: dragon,
+  }
+}
+
+/**
+* replaces the fightingDragon in the store with an empty object.
+*
+* @returns {object} - with the type of action
+*
+*/
+
+export function clearFightingDragon() {
+  return {
+    type: CLEAR_FIGHTING_DRAGON,
   }
 }
 
