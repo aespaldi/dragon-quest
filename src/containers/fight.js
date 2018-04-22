@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { callHuman, saveHuman, updateHuman, updateDragon } from '../actions'
+import { callHuman, clearFightingDragon, saveHuman, updateHuman, updateDragon } from '../actions'
 import { nextLevelStatValue } from '../helpers';
 import DragonCard from './dragon_card';
 import EnterBattleBtn from '../components/enterBattleBtn';
@@ -33,6 +33,10 @@ class Fight extends Component {
     if (!this.props.human.type) {
       this.props.callHuman(1);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.clearFightingDragon();
   }
 
   /**
@@ -284,4 +288,4 @@ function mapStateToProps({ fightingDragon, human}) {
   return { fightingDragon, human };
 };
 
-export default connect(mapStateToProps, { callHuman, saveHuman, updateDragon, updateHuman})(Fight);
+export default connect(mapStateToProps, { callHuman, clearFightingDragon, saveHuman, updateDragon, updateHuman})(Fight);

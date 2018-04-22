@@ -19,7 +19,9 @@ class MergeContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.getAllDragons();
+    if (!this.props.allDragons[0]) {
+      this.props.getAllDragons();
+    }
   }
 
   componentWillUnmount() {

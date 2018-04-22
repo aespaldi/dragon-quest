@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addToUserDragons, getRandomDragon } from '../actions';
+import { addToUserDragons, clearRandomDragon, getRandomDragon } from '../actions';
 import { generateRandomNumber } from '../helpers';
 import DragonCard from '../containers/dragon_card.js';
 import './get_random_dragon.css';
@@ -20,6 +20,10 @@ class GetRandomDragon extends Component {
 
   componentDidMount() {
     this.props.getRandomDragon(1);
+  }
+
+  componentWillUnmount() {
+    this.props.clearRandomDragon();
   }
 
   /**
@@ -75,4 +79,4 @@ function mapStateToProps({ dragons, randomDragon }) {
   return { dragons, randomDragon };
 };
 
-export default connect(mapStateToProps, { getRandomDragon, addToUserDragons })(GetRandomDragon);
+export default connect(mapStateToProps, { addToUserDragons, clearRandomDragon, getRandomDragon })(GetRandomDragon);

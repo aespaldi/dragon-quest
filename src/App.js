@@ -30,8 +30,6 @@ class App extends Component {
     this.toggleMergeMode = this.toggleMergeMode.bind(this);
   }
 
-
-
   acceptDragon() {
     this.setState({
       randomDragonIsVisible: false,
@@ -90,7 +88,70 @@ class App extends Component {
     };
   };
 
-  // all of the view functions.
+  // all of the render view functions.
+
+  /**
+  * @function renderFightView - renders the fightview jsx if the game is in fightmode.
+  * @returns {JSX Component}
+  */
+
+  renderFightView() {
+    if (this.state.fightMode) {
+      return (
+        <FightView
+          declareGameOver={this.declareGameOver}
+          fightMode={this.state.fightMode}
+          gameOver={this.state.gameOver}
+          mergeMode={this.state.mergeMode}
+          toggleFightMode={this.toggleFightMode}
+        />
+      );
+    }
+  }
+
+  /**
+  * @function renderGameOverScreen - renders the gameover jsx if the game victory condition has been met.
+  * @returns {JSX Component}
+  */
+
+  renderGameOverScreen() {
+    if (this.state.gameOver) {
+      return (
+        <GameOverScreen
+          gameOver={this.state.gameOver}
+        />
+      );
+    }
+  };
+
+  /**
+  * @function renderMainView - renders the mainview jsx if the game is not in any special modes.
+  * @returns {JSX Component}
+  */
+
+  renderMainView() {
+    if (!this.state.randomDragonIsVisible && !this.state.fightMode && !this.state.mergeContainerIsVisible && !this.state.gameOver) {
+      return (
+        <MainView
+          callDragon={this.callDragon}
+          randomDragonIsVisible={this.state.randomDragonIsVisible}
+          fightMode={this.state.fightMode}
+          mergeContainerIsVisible={this.state.mergeContainerIsVisible}
+          mergingDragons={this.props.mergingDragons}
+          mergeMode={this.state.mergeMode}
+          gameOver={this.state.gameOver}
+          toggleMergeContainer={this.toggleMergeContainer}
+          toggleMergeMode={this.toggleMergeMode}
+          toggleFightMode={this.toggleFightMode}
+        />
+      );
+    }
+  }
+
+  /**
+  * @function renderMergeView - renders the mergeview jsx if the game is in mergemode.
+  * @returns {JSX Component}
+  */
 
   renderMergeView() {
     if (this.state.mergeContainerIsVisible) {
@@ -106,6 +167,11 @@ class App extends Component {
     return null;
   };
 
+  /**
+  * @function renderRandomDragonContainer - renders the random dragon choice jsx if the player selects "call new dragon".
+  * @returns {JSX Component}
+  */
+
   renderRandomDragonContainer() {
     if (this.state.randomDragonIsVisible) {
       return (
@@ -118,36 +184,15 @@ class App extends Component {
     }
   };
 
-
-
   render() {
     return (
       <div className="App">
         <h1 className="main-title">Dragon Quest</h1>
-        <GameOverScreen
-          gameOver={this.state.gameOver}
-        />
-        <FightView
-          declareGameOver={this.declareGameOver}
-          fightMode={this.state.fightMode}
-          gameOver={this.state.gameOver}
-          mergeMode={this.state.mergeMode}
-          toggleFightMode={this.toggleFightMode}
-        />
+        {this.renderGameOverScreen()}
+        {this.renderFightView()}
         {this.renderMergeView()}
         {this.renderRandomDragonContainer()}
-        <MainView
-          callDragon={this.callDragon}
-          randomDragonIsVisible={this.state.randomDragonIsVisible}
-          fightMode={this.state.fightMode}
-          mergeContainerIsVisible={this.state.mergeContainerIsVisible}
-          mergingDragons={this.props.mergingDragons}
-          mergeMode={this.state.mergeMode}
-          gameOver={this.state.gameOver}
-          toggleMergeContainer={this.toggleMergeContainer}
-          toggleMergeMode={this.toggleMergeMode}
-          toggleFightMode={this.toggleFightMode}
-        />
+        {this.renderMainView()}
       </div>
     );
   };
