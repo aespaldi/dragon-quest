@@ -5,8 +5,9 @@ import moxios from 'moxios';
 
 import { callHuman, getAllDragons, getRandomDragon, addToUserDragons, clearFightingDragon, clearMergingDragons,
 clearNewDragon, clearRandomDragon, enterFightMode, mergingDragon, removeFromUserDragons, saveDragon, saveHuman, updateHuman, updateDragon } from '../actions';
-import { SPAWN_HUMAN } from '../actions';
-import callHumanMock from '../../mocks';
+
+import { GET_DRAGON_LIST, GET_RANDOM_DRAGON, SPAWN_HUMAN } from '../actions';
+import { allDragonsMock, callHumanMock, getRandomDragonMock } from '../../mocks';
 
 const middlewares = [promise];
 const mockStore = configureStore(middlewares);
@@ -42,7 +43,7 @@ describe('callHuman', () => {
     moxios.uninstall();
   })
 
-  it('returns type: SPAWN_HUMAN and payload: {human} after a successful axios call', () => {
+  it('returns { type: SPAWN_HUMAN and payload: {human} } after a successful axios call', () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -62,11 +63,60 @@ describe('callHuman', () => {
 });
 
 describe('getAllDragons', () => {
-  // will come back and do the mock tests later.
-})
+  beforeEach(function () {
+    moxios.install();
+  })
+  afterEach(function () {
+    moxios.uninstall();
+  })
+
+  it('returns { type: GET_DRAGON_LIST and payload: {dragons} } after a successful axios call', () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: allDragonsMock,
+      });
+    });
+
+    const expectedAction = { type: GET_DRAGON_LIST, payload: allDragonsMock }
+
+    const store = mockStore({ payload: {} })
+
+    return store.dispatch(getAllDragons())
+      .then(() => {
+        expect(store.getActions()[0]).toEqual(expectedAction);
+      });
+  });
+});
+
 
 describe('getRandomDragon', () => {
-  // will come back and do the mock tests later.
+  beforeEach(function () {
+    moxios.install();
+  })
+  afterEach(function () {
+    moxios.uninstall();
+  })
+
+  it('returns { type: GET_RANDOM_DRAGON and payload: {randomDragon} } after a successful axios call', () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {randomDragon: getRandomDragonMock },
+      });
+    });
+
+    const expectedAction = { type: GET_RANDOM_DRAGON, payload: getRandomDragonMock }
+
+    const store = mockStore({ payload: {} })
+
+    return store.dispatch(getRandomDragon(1))
+      .then(() => {
+        expect(store.getActions()[0]).toEqual(expectedAction);
+      });
+  });
 })
 
 describe('clearFightingDragon', () => {

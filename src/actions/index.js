@@ -50,10 +50,11 @@ export function callHuman(id) {
 
 export function getAllDragons() {
   const url = `${ROOT_URL}/dragons`;
-  const request = axios.get(url);
+  const dragons = axios.get(url)
+    .then(response => response.data)
   return {
     type: GET_DRAGON_LIST,
-    payload: request,
+    payload: dragons,
   }
 }
 
@@ -67,11 +68,11 @@ export function getAllDragons() {
 
 export function getRandomDragon(level) {
   const url = `${ROOT_URL}/dragons/random/${level}`;
-  const request = axios.get(url);
-
+  const dragon = axios.get(url)
+    .then(response => response.data.randomDragon)
   return {
     type: GET_RANDOM_DRAGON,
-    payload: request,
+    payload: dragon,
   }
 }
 
