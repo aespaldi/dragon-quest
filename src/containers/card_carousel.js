@@ -37,7 +37,6 @@ class ControlledCarousel extends Component {
   }
 
   render() {
-    console.log("props in carousel component", this.props);
     const { index, direction } = this.state;
     let dragonList = null;
 

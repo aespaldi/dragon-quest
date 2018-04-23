@@ -12,12 +12,14 @@ const createStoreWithMiddleware = createStore(
     applyMiddleware(promise))
   )
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <Provider store={createStoreWithMiddleware} >
-      <App />
-    </Provider>, div
+describe('App component', () => {
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(
+      <Provider store={createStoreWithMiddleware} >
+        <App />
+      </Provider>, div
     );
-  ReactDOM.unmountComponentAtNode(div);
-});
+    ReactDOM.unmountComponentAtNode(div);
+  });
+})
