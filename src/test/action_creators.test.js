@@ -3,10 +3,8 @@ import promise from 'redux-promise';
 import axios from 'axios';
 import moxios from 'moxios';
 
-import { callHuman, getAllDragons, getRandomDragon, addToUserDragons, clearFightingDragon, clearMergingDragons,
-clearNewDragon, clearRandomDragon, enterFightMode, mergingDragon, removeFromUserDragons, saveDragon, saveHuman, updateHuman, updateDragon } from '../actions';
+import * as actions from '../actions';
 
-import { GET_DRAGON_LIST, GET_RANDOM_DRAGON, SPAWN_HUMAN } from '../actions';
 import { allDragonsMock, callHumanMock, getRandomDragonMock } from '../../mocks';
 
 const middlewares = [promise];
@@ -52,11 +50,11 @@ describe('callHuman', () => {
       });
     });
 
-    const expectedAction = { type: SPAWN_HUMAN, payload: callHumanMock }
+    const expectedAction = { type: actions.SPAWN_HUMAN, payload: callHumanMock }
 
     const store = mockStore({ payload: {} })
 
-    return store.dispatch(callHuman(1)).then(() => {
+    return store.dispatch(actions.callHuman(1)).then(() => {
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
   });
@@ -79,11 +77,11 @@ describe('getAllDragons', () => {
       });
     });
 
-    const expectedAction = { type: GET_DRAGON_LIST, payload: allDragonsMock }
+    const expectedAction = { type: actions.GET_DRAGON_LIST, payload: allDragonsMock }
 
     const store = mockStore({ payload: {} })
 
-    return store.dispatch(getAllDragons())
+    return store.dispatch(actions.getAllDragons())
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedAction);
       });
@@ -108,11 +106,11 @@ describe('getRandomDragon', () => {
       });
     });
 
-    const expectedAction = { type: GET_RANDOM_DRAGON, payload: getRandomDragonMock }
+    const expectedAction = { type: actions.GET_RANDOM_DRAGON, payload: getRandomDragonMock }
 
     const store = mockStore({ payload: {} })
 
-    return store.dispatch(getRandomDragon(1))
+    return store.dispatch(actions.getRandomDragon(1))
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedAction);
       });
@@ -121,31 +119,31 @@ describe('getRandomDragon', () => {
 
 describe('clearFightingDragon', () => {
   test('it returns an object with a property of type', () => {
-    expect(clearFightingDragon()).toMatchObject({type: expect.anything()})
+    expect(actions.clearFightingDragon()).toMatchObject({type: expect.anything()})
   })
 });
 
 describe('clearMergingDragons', () => {
   test('it returns an object with a property of type', () => {
-    expect(clearMergingDragons()).toMatchObject({type: expect.anything()})
+    expect(actions.clearMergingDragons()).toMatchObject({type: expect.anything()})
   });
 });
 
 describe('clearNewDragon', () => {
   test('it returns an object with a property of type', () => {
-    expect(clearNewDragon()).toMatchObject({type: expect.anything()})
+    expect(actions.clearNewDragon()).toMatchObject({type: expect.anything()})
   });
 });
 
 describe('clearRandomDragon', () => {
   test('it returns an object with a property of type', () => {
-    expect(clearRandomDragon()).toMatchObject({type: expect.anything()})
+    expect(actions.clearRandomDragon()).toMatchObject({type: expect.anything()})
   });
 });
 
 describe('enterFightMode', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(enterFightMode(testDragon)).toMatchObject(
+    expect(actions.enterFightMode(testDragon)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testDragon)
@@ -155,7 +153,7 @@ describe('enterFightMode', () => {
 
 describe('mergingDragon', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(mergingDragon(testDragon)).toMatchObject(
+    expect(actions.mergingDragon(testDragon)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testDragon)
@@ -165,7 +163,7 @@ describe('mergingDragon', () => {
 
 describe('removeFromUserDragons', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(removeFromUserDragons(testDragon)).toMatchObject(
+    expect(actions.removeFromUserDragons(testDragon)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testDragon)
@@ -175,7 +173,7 @@ describe('removeFromUserDragons', () => {
 
 describe('saveDragon', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(saveDragon(testDragon)).toMatchObject(
+    expect(actions.saveDragon(testDragon)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testDragon)
@@ -185,7 +183,7 @@ describe('saveDragon', () => {
 
 describe('saveHuman', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(saveHuman(testHuman)).toMatchObject(
+    expect(actions.saveHuman(testHuman)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testHuman)
@@ -195,7 +193,7 @@ describe('saveHuman', () => {
 
 describe('updateHuman', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(updateHuman(testHuman)).toMatchObject(
+    expect(actions.updateHuman(testHuman)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testHuman)
@@ -205,7 +203,7 @@ describe('updateHuman', () => {
 
 describe('updateDragon', () => {
   test('it returns an object with the properties of type and payload', () => {
-    expect(updateDragon(testDragon)).toMatchObject(
+    expect(actions.updateDragon(testDragon)).toMatchObject(
       {
         type: expect.anything(),
         payload: expect.objectContaining(testDragon)
