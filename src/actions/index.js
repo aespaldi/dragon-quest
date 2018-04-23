@@ -56,19 +56,6 @@ export function getAllDragons() {
 }
 
 /**
-* replaces the randomDragon in the store with an empty object.
-*
-* @returns {object} - with the type of action
-*
-*/
-
-export function clearRandomDragon() {
-  return {
-    type: CLEAR_RANDOM_DRAGON,
-  }
-}
-
-/**
 * get a random dragon by level.
 *
 * @param {string} level
@@ -101,6 +88,7 @@ export function addToUserDragons(dragon) {
     payload: dragon,
   }
 }
+
 
 /**
 * replaces the fightingDragon in the store with an empty object.
@@ -138,6 +126,19 @@ export function clearMergingDragons() {
 export function clearNewDragon() {
   return {
     type: CLEAR_NEW_DRAGON,
+  }
+}
+
+/**
+* replaces the randomDragon in the store with an empty object.
+*
+* @returns {object} - with the type of action
+*
+*/
+
+export function clearRandomDragon() {
+  return {
+    type: CLEAR_RANDOM_DRAGON,
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import Carousel from 'react-bootstrap/lib/Carousel';
 import DragonCard from '../containers/dragon_card.js';
 import { addToUserDragons } from '../actions/';
@@ -36,6 +37,7 @@ class ControlledCarousel extends Component {
   }
 
   render() {
+    console.log("props in carousel component", this.props);
     const { index, direction } = this.state;
     let dragonList = null;
 

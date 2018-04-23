@@ -1,5 +1,5 @@
 import React from 'react';
-import CardCarousel from '../containers/card_carousel';
+import ControlledCarousel from '../containers/card_carousel';
 import CallDragonBtn from './callDragonBtn';
 import MergeBtn from './mergeBtn';
 import PrepareToMergeBtn from './prepareToMergeBtn';
@@ -24,7 +24,8 @@ export default function MainView(props) {
         </div>
       </div>
       <div className="carousel">
-        <CardCarousel
+        <ControlledCarousel
+          store={props.store}
           toggleFightMode={props.toggleFightMode}
           mergeMode={props.mergeMode}
         />
