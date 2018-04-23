@@ -5,7 +5,7 @@ export default function(state={}, action) {
     case CLEAR_RANDOM_DRAGON:
       return {}
     case GET_RANDOM_DRAGON:
-      return action.payload.data.randomDragon
+      return action.payload
     default: return state;
   }
 }
