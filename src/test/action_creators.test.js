@@ -1,5 +1,11 @@
+import configureStore from 'redux-mock-store';
+import promise from 'redux-promise';
+
 import { callHuman, getAllDragons, getRandomDragon, addToUserDragons, clearFightingDragon, clearMergingDragons,
 clearNewDragon, clearRandomDragon, enterFightMode, mergingDragon, removeFromUserDragons, saveDragon, saveHuman, updateHuman, updateDragon } from '../actions';
+
+const middlewares = [promise];
+const mockStore = configureStore(middlewares);
 
 const testDragon = {
   type: 'red',
