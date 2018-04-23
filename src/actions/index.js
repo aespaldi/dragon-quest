@@ -32,10 +32,12 @@ const ROOT_URL = 'http://localhost:3001';
 
 export function callHuman(id) {
   const url = `${ROOT_URL}/humans/${id}`;
-  const request = axios.get(url);
+  const human =
+    axios.get(url)
+      .then(response => response.data.human)
   return {
     type: SPAWN_HUMAN,
-    payload: request,
+    payload: human,
   }
 }
 

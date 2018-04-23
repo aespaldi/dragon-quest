@@ -186,7 +186,6 @@ export class App extends Component {
   };
 
   render() {
-    console.log('props in app container', this.props);
     return (
       <div className="App">
         <h1 className="main-title">Dragon Quest</h1>

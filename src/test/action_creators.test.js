@@ -1,11 +1,18 @@
 import configureStore from 'redux-mock-store';
 import promise from 'redux-promise';
+import axios from 'axios';
+import moxios from 'moxios';
 
 import { callHuman, getAllDragons, getRandomDragon, addToUserDragons, clearFightingDragon, clearMergingDragons,
 clearNewDragon, clearRandomDragon, enterFightMode, mergingDragon, removeFromUserDragons, saveDragon, saveHuman, updateHuman, updateDragon } from '../actions';
+import { SPAWN_HUMAN } from '../actions';
+import callHumanMock from '../../mocks';
 
 const middlewares = [promise];
 const mockStore = configureStore(middlewares);
+
+// const ROOT_URL = `https://dragon-game-api.herokuapp.com`;
+const ROOT_URL = 'http://localhost:3001';
 
 const testDragon = {
   type: 'red',
@@ -28,8 +35,31 @@ const testHuman = {
 }
 
 describe('callHuman', () => {
-  // will come back and do the mock tests later.
-})
+  beforeEach(function () {
+    moxios.install();
+  })
+  afterEach(function () {
+    moxios.uninstall();
+  })
+
+  it('returns type: SPAWN_HUMAN and payload: {human} after a successful axios call', () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 200,
+        response: {human: callHumanMock},
+      });
+    });
+
+    const expectedAction = { type: SPAWN_HUMAN, payload: callHumanMock }
+
+    const store = mockStore({ payload: {} })
+
+    return store.dispatch(callHuman(1)).then(() => {
+      expect(store.getActions()[0]).toEqual(expectedAction);
+    });
+  });
+});
 
 describe('getAllDragons', () => {
   // will come back and do the mock tests later.

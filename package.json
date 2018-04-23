@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
+    "moxios": "^0.4.0",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
