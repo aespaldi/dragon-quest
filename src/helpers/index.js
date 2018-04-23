@@ -1,7 +1,3 @@
-/**
-* @function generateRandomNumber - creates unique key to use as IDs and keys throughout the app.
-* @returns {number}
-*/
 
 /**
 * @function chooseRandomFrom - takes in an array of dragons and returns a random one.
@@ -16,10 +12,16 @@ function chooseRandomFrom(arr, num) {
   return chosenDragon;
 };
 
+/**
+* @function generateRandomNumber - creates unique key to use as IDs and keys throughout the app.
+* @returns {number}
+*/
+
 function generateRandomNumber() {
   const randomNum = Math.floor(Math.random() * 10000);
   return `${randomNum}_${new Date().getTime()}`;
 };
+
 
 function nextLevelStatValue(currentStatValue, multiplier) {
   return Math.round(currentStatValue + (currentStatValue * multiplier))

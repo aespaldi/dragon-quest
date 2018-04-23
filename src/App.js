@@ -9,7 +9,7 @@ import MainView from './components/mainView';
 import MergeContainer from './containers/merge_container.js'
 import { clearMergingDragons, mergingDragon } from './actions';
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
 
@@ -133,6 +133,7 @@ class App extends Component {
     if (!this.state.randomDragonIsVisible && !this.state.fightMode && !this.state.mergeContainerIsVisible && !this.state.gameOver) {
       return (
         <MainView
+          store={this.props.store}
           callDragon={this.callDragon}
           randomDragonIsVisible={this.state.randomDragonIsVisible}
           fightMode={this.state.fightMode}
@@ -185,6 +186,7 @@ class App extends Component {
   };
 
   render() {
+    console.log('props in app container', this.props);
     return (
       <div className="App">
         <h1 className="main-title">Dragon Quest</h1>
