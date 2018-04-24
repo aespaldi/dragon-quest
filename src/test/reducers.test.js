@@ -2,7 +2,10 @@ import reducerAllDragons from '../reducers/reducer_all_dragons';
 import reducerDragons from '../reducers/reducer_dragons.js';
 import reducerFightingDragon from '../reducers/reducer_fighting_dragon.js';
 import reducerHuman from '../reducers/reducer_human.js';
+import reducerMergingDragon from '../reducers/reducer_merging_dragons';
 import * as types from '../actions';
+import reducerNewDragon from '../reducers/reducer_new_dragon.js';
+import reducerRandomDragon from '../reducers/reducer_random_dragon.js';
 
 const fakeDragonArray = [
   {
@@ -130,5 +133,65 @@ describe('reducerHuman', () => {
       type: types.UPDATE_HUMAN_HP,
       payload: injuredHuman,
     })).toEqual(injuredHuman);
+  });
+});
+
+describe('reducerMergingDragon', () => {
+  it('should return the initial state', () => {
+    expect(reducerHuman(undefined, {})).toEqual({});
+  });
+  it('should add a dragon to the mergingDragons array when type MERGING_DRAGON is passed in and the array is empty', () => {
+    expect(reducerMergingDragon([], {
+      type: types.MERGING_DRAGON,
+      payload: fakeDragon,
+    })).toEqual([
+      fakeDragon
+    ]);
+  });
+  it('should add a dragon to the mergingDragons array when type MERGING_DRAGON is passed in and the array has one item already', () => {
+    expect(reducerMergingDragon([
+      injuredDragon], {
+        type: types.MERGING_DRAGON,
+        payload: fakeDragon,
+      })).toEqual([injuredDragon, fakeDragon]);
+  });
+  it('should clear all dragons from the mergingDragons array when type CLEAR_MERGING_DRAGONS is passed in', () => {
+    expect(reducerMergingDragon([injuredDragon, fakeDragon], {
+      type: types.CLEAR_MERGING_DRAGONS,
+    })).toEqual([]);
+  });
+});
+
+describe('reducerNewDragon', () => {
+  it('should return the initial state', () => {
+    expect(reducerNewDragon(undefined, {})).toEqual({});
+  });
+  it('should save a new dragon to the state when type SAVE_NEW_HUMAN is passed in', () => {
+    expect(reducerNewDragon({}, {
+      type: types.SAVE_NEW_DRAGON,
+      payload: fakeDragon,
+    })).toEqual(fakeDragon);
+  });
+  it('should clear the dragon from state if type CLEAR_NEW_DRAGON is passed in', () => {
+    expect(reducerNewDragon(fakeDragon, {
+      type: types.CLEAR_NEW_DRAGON,
+    })).toEqual({});
+  });
+});
+
+describe('reducerRandomDragon', () => {
+  it('should return the initial state', () => {
+    expect(reducerRandomDragon(undefined, {})).toEqual({});
+  });
+  it('should clear the random dragon from state if type CLEAR_RANDOM_DRAGON is passed in', () => {
+    expect(reducerRandomDragon(fakeDragon, {
+      type: types.CLEAR_RANDOM_DRAGON,
+    })).toEqual({});
+  });
+  it('should add the random dragon to state if type GET_RANDOM_DRAGON is passed in', () => {
+    expect(reducerRandomDragon({}, {
+      type: types.GET_RANDOM_DRAGON,
+      payload: fakeDragon,
+    })).toEqual(fakeDragon);
   });
 });
