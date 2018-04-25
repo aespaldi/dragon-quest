@@ -7,6 +7,7 @@ import * as types from '../actions';
 import reducerNewDragon from '../reducers/reducer_new_dragon.js';
 import reducerRandomDragon from '../reducers/reducer_random_dragon.js';
 
+/*CODE_REVIEW: fakeDragonArray could contain fakeDragon (instead of duplicating)*/
 const fakeDragonArray = [
   {
     type: 'red',
@@ -54,6 +55,7 @@ describe('all dragons reducer', () => {
     expect(reducerAllDragons([], {
       type: types.GET_DRAGON_LIST,
       payload: fakeDragonArray,
+      /*CODE_REVIEW: replace with .toEqual(fakeDragonArray)*/
     })).toEqual([
       {
         type: 'red',
@@ -72,6 +74,12 @@ describe('dragons reducer', () => {
   it('should return the initial state', () => {
     expect(reducerDragons(undefined, {})).toEqual([]);
   });
+
+/*CODE_REVIEW: this is testing adding and removing to an empty array, but I would also test with an
+array with some dragons in it to start - that way we know there isn't weird behaviour
+like ADD_DRAGON replaces all dragons with the one we add or REMOVE_DRAGON creates an empty array
+when we start with 3 dragons.  Also, what is expected from REMOVE_DRAGON if we try to remove a dragon
+that isn't in there.*/
   it('should return an array with one additional dragon if case ADD_DRAGON is used', () => {
     expect(reducerDragons([], {
       type: types.ADD_DRAGON,
@@ -104,6 +112,10 @@ describe('fightingDragon reducer', () => {
       payload: fakeDragon
     })).toEqual(fakeDragon);
   });
+/* CODE_REVIEW: This test is ok, but I wonder about the UPDATE_DRAGON_HP reducer - should it be passed
+an entire new dragon or just the HP for the exisitng dragon? (Let's discuss the gaming logic)
+As written, it doesn't consider the unhappy path of where something other than the HP is changed
+*/
   it('should change the hp of the fightingDragon in state if UPDATE_DRAGON_HP is the type passed in', () => {
     expect(reducerFightingDragon(fakeDragon, {
       type: types.UPDATE_DRAGON_HP,
@@ -136,6 +148,7 @@ describe('reducerHuman', () => {
   });
 });
 
+/*CODE_REVIEW Is the mergingDragons array always empty before merging? If not, test with an array with dragons in it already*/
 describe('reducerMergingDragon', () => {
   it('should return the initial state', () => {
     expect(reducerHuman(undefined, {})).toEqual({});
@@ -162,6 +175,7 @@ describe('reducerMergingDragon', () => {
   });
 });
 
+/*CODE_REVIEW: typo? SAVE_NEW_DRAGON*/
 describe('reducerNewDragon', () => {
   it('should return the initial state', () => {
     expect(reducerNewDragon(undefined, {})).toEqual({});

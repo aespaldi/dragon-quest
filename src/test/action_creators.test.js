@@ -1,3 +1,5 @@
+
+
 import configureStore from 'redux-mock-store';
 import promise from 'redux-promise';
 import axios from 'axios';
@@ -34,6 +36,8 @@ const testHuman = {
 }
 
 describe('callHuman', () => {
+/*CODE_REVIEW: factor the beforeEach and afterEach out into an outer encompasing
+describe block to avoid re-writing in each action describe */
   beforeEach(function () {
     moxios.install();
   })
